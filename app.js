@@ -158,8 +158,6 @@ function openCampaignForm(campaignId=null){
  $('#campaignName').value=existing?.name||'';
  $('#campaignStartDate').value=existing?.startDate||today();
  $('#campaignStartReading').value=existing?.startReading??'';
- $('#campaignEndDate').value=existing?.endDate||'';
- $('#campaignEndReading').value=existing?.endReading??'';
  const machineSelect=$('#campaignMachine');
  const allowed=state.machines.filter(m=>m.active||m.id===existing?.machineId);
  machineSelect.innerHTML=allowed.map(m=>`<option value="${m.id}">${esc(loc(m.locationId)?.name||'場地')}・${esc(m.number)} 號${m.active?'':'（已停用）'}</option>`).join('')||'<option value="">請先建立營運中機台</option>';
@@ -238,30 +236,27 @@ $('#campaignForm').addEventListener('submit',e=>{
  const existing=campaignEditId?state.campaigns.find(c=>c.id===campaignEditId):null;
  const m=machine($('#campaignMachine').value);
  const items=$$('#campaignItems .campaign-item').map(row=>({id:row.dataset.itemId||uuid(),name:row.querySelector('[name="itemName"]').value.trim(),unitCost:Number(row.querySelector('[name="itemCost"]').value),quantity:Number(row.querySelector('[name="itemQty"]').value)}));
- const name=$('#campaignName').value.trim(),startDate=$('#campaignStartDate').value,endDate=$('#campaignEndDate').value||'',startReading=Number($('#campaignStartReading').value),endReadingRaw=$('#campaignEndReading').value,endReading=endReadingRaw===''?null:Number(endReadingRaw);
  if(!name)return toast('請輸入活動名稱。',true);
  if(!m)return toast('請選擇活動機台。',true);
  if(!startDate)return toast('請選擇活動開始日期。',true);
- if(endDate&&endDate<startDate)return toast('活動結束日期不可早於開始日期。',true);
  if(!Number.isInteger(startReading)||startReading<0)return toast('請輸入有效的活動起始讀數。',true);
- if(endReading!==null&&(!Number.isInteger(endReading)||endReading<startReading))return toast('活動結束讀數必須是有效整數，且不可小於開始讀數。',true);
  if(!items.length||items.some(i=>!i.name||!Number.isFinite(i.unitCost)||i.unitCost<0||!Number.isInteger(i.quantity)||i.quantity<1))return toast('請確認每個品項都有名稱、有效成本與正整數數量。',true);
  const totalCost=items.reduce((sum,item)=>sum+item.unitCost*item.quantity,0);
- const ended=Boolean(endDate&&endReading!==null)||(existing?.status==='ended'&&!endDate&&endReading!==null);
  const next={
    ...(existing||{}),
    id:existing?.id||uuid(),
    name,machineId:m.id,machineNumber:m.number,startDate,startReading,
-   endDate:endDate||(existing?.status==='ended'?existing.endDate||'':''),
-   endReading:endReading!==null?endReading:(existing?.status==='ended'?existing.endReading:null),
+   // 結束日期與結束讀數只由「結束活動」操作寫入；編輯活動內容時保留既有結束資訊。
+   endDate:existing?.endDate||'',
+   endReading:existing?.endReading??null,
    coin:(existing&&existing.machineId===m.id)?Number(existing.coin??m.coin??10):Number(m.coin||10),
    items,totalCost,
-   status:ended?'ended':(existing?.status==='ended'?'ended':'active'),
+   status:existing?.status==='ended'?'ended':'active',
    createdAt:existing?.createdAt||Date.now()
  };
  if(next.status==='ended'){
-   if(!next.endDate||next.endReading==null)return toast('已結束活動必須保留結束日期與結束讀數。',true);
-   if(next.endDate<next.startDate||Number(next.endReading)<Number(next.startReading))return toast('結束日期或結束讀數不可早於活動起點。',true);
+   if(!next.endDate||next.endReading==null)return toast('這筆已結束活動缺少結束資訊，請檢查資料。',true);
+   if(next.endDate<next.startDate||Number(next.endReading)<Number(next.startReading))return toast('開始日期或起始讀數不可晚於既有的活動結束資料。',true);
    next.campaignMeterRevenue=(Number(next.endReading)-Number(next.startReading))*Number(next.coin||10);
    next.campaignProfit=next.campaignMeterRevenue-totalCost;
  }else{
