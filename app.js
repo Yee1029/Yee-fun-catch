@@ -10,7 +10,7 @@ const money=n=>'NT$ '+Number(n||0).toLocaleString('en-US');const today=()=>{let 
 const loc=id=>state.locations.find(x=>x.id===id), machine=id=>state.machines.find(x=>x.id===id), activeM=()=>state.machines.filter(m=>m.active), rentTotal=()=>activeM().reduce((s,m)=>s+Number(m.rent||0),0);
 function save(){localStorage.setItem(KEY,JSON.stringify(state))}
 function toast(t,bad=false){let el=$('#toast');if(!el)return;el.textContent=t;el.classList.toggle('bad',bad);el.classList.remove('hidden');clearTimeout(timer);timer=setTimeout(()=>el.classList.add('hidden'),2800)}
-function page(p){$$('.page').forEach(x=>x.classList.toggle('active',x.id==='page-'+p));$$('.nav').forEach(x=>x.classList.toggle('active',x.dataset.page===p));$('#crumb').textContent=$(`[data-page="${p}"]`)?.textContent.trim().replace(/^\S+\s*/,'')||'營運總覽';$('#sidebar').classList.remove('open');renderAll();window.scrollTo({top:0,behavior:'smooth'})}
+function page(p){if(p!=='campaigns'&&$('#campaignFormPanel'))$('#campaignFormPanel').classList.add('hidden');$$('.page').forEach(x=>x.classList.toggle('active',x.id==='page-'+p));$$('.nav').forEach(x=>x.classList.toggle('active',x.dataset.page===p));$('#crumb').textContent=$(`[data-page="${p}"]`)?.textContent.trim().replace(/^\S+\s*/,'')||'營運總覽';$('#sidebar').classList.remove('open');renderAll();window.scrollTo({top:0,behavior:'smooth'})}
 function periodRange(date=new Date()){let d;if(date instanceof Date){d=new Date(date.getFullYear(),date.getMonth(),date.getDate(),12,0,0)}else{d=new Date(String(date)+'T12:00:00')}let start=new Date(d.getFullYear(),d.getMonth(),10);if(d.getDate()<10)start=new Date(d.getFullYear(),d.getMonth()-1,10);let end=new Date(start.getFullYear(),start.getMonth()+1,10);const fmt=x=>`${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}`;return {start:fmt(start),end:fmt(end)}}
 function inCurrentPeriod(r){let p=periodRange();return r.date>=p.start&&r.date<p.end}
 function campaignCostForPeriod(){let p=periodRange();return state.campaigns.filter(c=>c.startDate>=p.start&&c.startDate<p.end).reduce((s,c)=>s+Number(c.totalCost||0),0)}
@@ -61,6 +61,9 @@ function renderCampaigns(){
  if(state.machines.some(m=>m.id===old&&m.active))select.value=old;
  const rows=state.campaigns.slice().sort((a,b)=>b.startDate.localeCompare(a.startDate));
  $('#campaignTotal').textContent=`${rows.length} 筆活動`;
+ $('#campaignHistoryCount').textContent=rows.length;
+ $('#campaignActiveCount').textContent=rows.filter(c=>c.status!=='ended').length;
+ $('#campaignPeriodCost').textContent=money(campaignCostForPeriod());
  $('#campaignTable').innerHTML=rows.map(c=>{let m=machine(c.machineId);return `<tr><td><strong>${esc(c.name)}</strong></td><td>${esc(loc(m?.locationId)?.name||'—')}・${esc(m?.number||c.machineNumber||'—')} 號</td><td>${esc(c.startDate)}</td><td>${(c.items||[]).map(i=>`${esc(i.name)} × ${i.quantity}`).join('<br>')||'—'}</td><td class="money"><strong>${money(c.totalCost)}</strong></td><td><span class="status ${c.status==='ended'?'off':''}">${c.status==='ended'?'已結束':'進行中'}</span></td><td>${c.status==='ended'?'—':`<button class="action" data-end-c="${c.id}">結束活動</button>`} <button class="action" data-delete-c="${c.id}">刪除</button></td></tr>`}).join('');
  $('#campaignEmpty').classList.toggle('hidden',rows.length>0);
 }

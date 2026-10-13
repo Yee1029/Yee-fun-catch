@@ -18,3 +18,9 @@
 .campaign-item label{display:flex;flex-direction:column;gap:7px;font-size:12px;color:#64748b}
 .campaign-item input{width:100%;min-width:0;padding:10px;border:1px solid #dce3ed;border-radius:8px;background:#fff;color:#24364b}
 @media(max-width:700px){.campaign-item{grid-template-columns:1fr 1fr}.campaign-item label:first-child{grid-column:1/-1}.campaign-item .remove-campaign-item{grid-column:1/-1;justify-self:end}}
+
+/* Campaign landing page summary */
+.campaign-stats{margin:18px 0 22px}
+#page-campaigns .panelhead h2{margin-bottom:4px}
+#page-campaigns .tablepanel{margin-top:18px}
+#page-campaigns .callout{margin-top:16px}
