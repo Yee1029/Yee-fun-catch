@@ -61,3 +61,26 @@ body:not(.authenticated) .shell{display:none}
 #campaignFormPanel .reading-preview{margin-top:16px}
 #campaignTable [data-edit-c]{font-weight:700;color:#173b6c}
 @media(max-width:700px){#campaignFormPanel .panelhead{align-items:flex-start;gap:12px}}
+
+/* Reading form toggle and expanded profitability analysis */
+#readingFormPanel{scroll-margin-top:18px}
+#readingFormPanel .panelhead{align-items:flex-start;margin-bottom:18px}
+#readingFormPanel .panelhead h2{margin:0 0 6px}
+#readingFormPanel .panelhead p{margin:0;max-width:680px;line-height:1.7}
+.export-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;max-width:560px}
+.export-actions .secondary{font-size:11px;padding:9px 11px;white-space:nowrap}
+.analysis-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:18px 0}
+.analysis-bars{display:grid;gap:19px;padding:8px 0}
+.analysis-bar-row>div:first-child{display:flex;justify-content:space-between;gap:10px;margin-bottom:8px;font-size:12px;color:#5d6c80}
+.analysis-bar-row strong{color:#233954;font-variant-numeric:tabular-nums}
+.analysis-bar-track,.trend-track{height:10px;border-radius:99px;background:#eef2f7;overflow:hidden}
+.analysis-bar-track i,.trend-track i{display:block;height:100%;border-radius:99px;background:#3476b9;min-width:0}
+.analysis-bar-track i.goods{background:#e5a24d}.analysis-bar-track i.campaign{background:#9674d8}.analysis-bar-track i.rent{background:#a8b4c5}
+.analysis-bar-row small{display:block;text-align:right;color:#8793a4;font-size:10px;margin-top:5px}
+.trend-chart{display:grid;gap:11px;padding:4px 0}
+.trend-item{display:grid;grid-template-columns:43px minmax(50px,1fr) 96px;gap:10px;align-items:center;font-size:11px;color:#69788c}
+.trend-item strong{text-align:right;color:#243952;font-size:11px;white-space:nowrap}
+.trend-track{height:9px}.trend-track i{background:#4e9a8a}
+#profitMachineTable td{white-space:nowrap}
+@media(max-width:900px){.analysis-grid{grid-template-columns:1fr}.export-actions{justify-content:flex-start;max-width:none}}
+@media(max-width:700px){.export-actions{display:grid;grid-template-columns:1fr;width:100%}.export-actions button{width:100%}.trend-item{grid-template-columns:38px minmax(30px,1fr) 82px;gap:7px}.analysis-grid{gap:12px}}
