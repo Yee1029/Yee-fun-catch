@@ -1,6 +1,7 @@
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const emptyState={locations:[],machines:[],readings:[],campaigns:[]};
 let state={...emptyState}, modalType='',editId=null,timer, supabaseClient=null, currentUser=null, syncQueue=Promise.resolve(), lastCloudIds={locations:new Set(),machines:new Set(),readings:new Set(),campaigns:new Set()};
+let campaignEditId=null;
 const uuid=()=>crypto.randomUUID();
 const configReady=()=>Boolean(window.SUPABASE_CONFIG?.url&&window.SUPABASE_CONFIG?.publishableKey&&!String(window.SUPABASE_CONFIG.url).includes('YOUR_PROJECT')&&!String(window.SUPABASE_CONFIG.publishableKey).includes('YOUR_PUBLISHABLE'));
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -141,12 +142,35 @@ function renderCampaigns(){
  $('#campaignHistoryCount').textContent=rows.length;
  $('#campaignActiveCount').textContent=rows.filter(c=>c.status!=='ended').length;
  $('#campaignPeriodCost').textContent=money(campaignCostForPeriod());
- $('#campaignTable').innerHTML=rows.map(c=>{let m=machine(c.machineId);return `<tr><td><strong>${esc(c.name)}</strong></td><td>${esc(loc(m?.locationId)?.name||'—')}・${esc(m?.number||c.machineNumber||'—')} 號</td><td>${esc(c.startDate)}<br><small>讀數：${Number(c.startReading||0).toLocaleString('en-US')}</small></td><td>${c.status==='ended'?`${esc(c.endDate||'—')}<br><small>讀數：${Number(c.endReading||0).toLocaleString('en-US')}</small>`:'尚未結束'}</td><td>${(c.items||[]).map(i=>`${esc(i.name)} × ${i.quantity}`).join('<br>')||'—'}</td><td class="money"><strong>${money(c.totalCost)}</strong></td><td class="money">${c.status==='ended'?money(c.campaignMeterRevenue||0):'—'}</td><td class="money"><strong>${c.status==='ended'?money(c.campaignProfit??((c.campaignMeterRevenue||0)-(c.totalCost||0))):'—'}</strong></td><td><span class="status ${c.status==='ended'?'off':''}">${c.status==='ended'?'已結束':'進行中'}</span></td><td>${c.status==='ended'?'—':`<button class="action" data-end-c="${c.id}">結束活動</button>`} <button class="action" data-delete-c="${c.id}">刪除</button></td></tr>`}).join('');
+ $('#campaignTable').innerHTML=rows.map(c=>{let m=machine(c.machineId);return `<tr><td><strong>${esc(c.name)}</strong></td><td>${esc(loc(m?.locationId)?.name||'—')}・${esc(m?.number||c.machineNumber||'—')} 號</td><td>${esc(c.startDate)}<br><small>讀數：${Number(c.startReading||0).toLocaleString('en-US')}</small></td><td>${c.status==='ended'?`${esc(c.endDate||'—')}<br><small>讀數：${Number(c.endReading||0).toLocaleString('en-US')}</small>`:'尚未結束'}</td><td>${(c.items||[]).map(i=>`${esc(i.name)} × ${i.quantity}`).join('<br>')||'—'}</td><td class="money"><strong>${money(c.totalCost)}</strong></td><td class="money">${c.status==='ended'?money(c.campaignMeterRevenue||0):'—'}</td><td class="money"><strong>${c.status==='ended'?money(c.campaignProfit??((c.campaignMeterRevenue||0)-(c.totalCost||0))):'—'}</strong></td><td><span class="status ${c.status==='ended'?'off':''}">${c.status==='ended'?'已結束':'進行中'}</span></td><td><button class="action" data-edit-c="${c.id}">編輯</button> ${c.status==='ended'?'—':`<button class="action" data-end-c="${c.id}">結束活動</button>`} <button class="action" data-delete-c="${c.id}">刪除</button></td></tr>`}).join('');
  $('#campaignEmpty').classList.toggle('hidden',rows.length>0);
 }
 function updateCampaignPreview(){let rows=$$('#campaignItems .campaign-item'),sum=0;rows.forEach(row=>{sum+=Math.max(0,Number(row.querySelector('[name="itemCost"]').value||0))*Math.max(0,Number(row.querySelector('[name="itemQty"]').value||0))});$('#campaignCostPreview').textContent=money(sum);$('#campaignItemCount').textContent=rows.length}
-function addCampaignItem(name='',cost=0,qty=1){let row=document.createElement('div');row.className='campaign-item';row.innerHTML=`<label>商品／獎品名稱<input name="itemName" required maxlength="80" placeholder="例如：限定公仔" value="${esc(name)}"></label><label>每件成本（NT$）<input name="itemCost" type="number" min="0" step="1" required value="${cost}"></label><label>數量<input name="itemQty" type="number" min="1" step="1" required value="${qty}"></label><button type="button" class="action remove-campaign-item">移除</button>`;$('#campaignItems').append(row);row.addEventListener('input',updateCampaignPreview);row.querySelector('.remove-campaign-item').onclick=()=>{row.remove();updateCampaignPreview()};updateCampaignPreview()}
-function openCampaignForm(){if(!state.machines.some(m=>m.active)){toast('請先建立營運中的機台。',true);page('machines');return}$('#campaignFormPanel').classList.remove('hidden');$('#campaignName').value='';$('#campaignStartDate').value=today();$('#campaignStartReading').value='';$('#campaignItems').innerHTML='';addCampaignItem();$('#campaignFormPanel').scrollIntoView({behavior:'smooth',block:'start'})}
+function addCampaignItem(name='',cost=0,qty=1,itemId=null){let row=document.createElement('div');row.className='campaign-item';if(itemId)row.dataset.itemId=itemId;row.innerHTML=`<label>商品／獎品名稱<input name="itemName" required maxlength="80" placeholder="例如：限定公仔" value="${esc(name)}"></label><label>每件成本（NT$）<input name="itemCost" type="number" min="0" step="1" required value="${cost}"></label><label>數量<input name="itemQty" type="number" min="1" step="1" required value="${qty}"></label><button type="button" class="action remove-campaign-item">移除</button>`;$('#campaignItems').append(row);row.addEventListener('input',updateCampaignPreview);row.querySelector('.remove-campaign-item').onclick=()=>{row.remove();updateCampaignPreview()};updateCampaignPreview()}
+function openCampaignForm(campaignId=null){
+ const existing=campaignId?state.campaigns.find(c=>c.id===campaignId):null;
+ if(!existing&&!state.machines.some(m=>m.active)){toast('請先建立營運中的機台。',true);page('machines');return}
+ campaignEditId=existing?.id||null;
+ $('#campaignFormPanel').classList.remove('hidden');
+ $('#campaignFormPanel').querySelector('h2').textContent=existing?'編輯特殊活動':'新增特殊活動';
+ $('#campaignFormPanel').querySelector('.panelhead p').textContent=existing?'可修改活動日期、起始／結束讀數及獎品內容；成本會即時重算。':'填寫活動基本資料及獎品項目，儲存後會加入歷史紀錄。';
+ $('#campaignForm').querySelector('[type="submit"]').textContent=existing?'儲存活動修改':'儲存特殊活動';
+ $('#campaignName').value=existing?.name||'';
+ $('#campaignStartDate').value=existing?.startDate||today();
+ $('#campaignStartReading').value=existing?.startReading??'';
+ $('#campaignEndDate').value=existing?.endDate||'';
+ $('#campaignEndReading').value=existing?.endReading??'';
+ const machineSelect=$('#campaignMachine');
+ const allowed=state.machines.filter(m=>m.active||m.id===existing?.machineId);
+ machineSelect.innerHTML=allowed.map(m=>`<option value="${m.id}">${esc(loc(m.locationId)?.name||'場地')}・${esc(m.number)} 號${m.active?'':'（已停用）'}</option>`).join('')||'<option value="">請先建立營運中機台</option>';
+ if(existing)machineSelect.value=existing.machineId;
+ $('#campaignItems').innerHTML='';
+ if(existing?.items?.length)existing.items.forEach(i=>addCampaignItem(i.name,i.unitCost,i.quantity,i.id));
+ else addCampaignItem();
+ $('#campaignItems').querySelectorAll('.campaign-item').forEach((row,index)=>{if(existing?.items?.[index]?.id)row.dataset.itemId=existing.items[index].id});
+ updateCampaignPreview();
+ $('#campaignFormPanel').scrollIntoView({behavior:'smooth',block:'start'});
+}
 function endCampaign(id){let c=state.campaigns.find(x=>x.id===id);if(!c)return;let m=machine(c.machineId);let last=latestReading(m?.id,today());let value=prompt(`請輸入「${c.name}」的活動結束讀數。\n活動開始讀數：${c.startReading}\n計算方式：(結束讀數 − 開始讀數) × 每格投幣金額 − 活動商品成本。`,String(last?.current??m?.initialReading??''));if(value===null)return;let reading=Number(value);if(!Number.isInteger(reading)||reading<Number(c.startReading))return toast('結束讀數需為有效整數，且不可小於活動起始讀數。',true);c.endDate=today();c.endReading=reading;c.status='ended';c.campaignMeterRevenue=(reading-Number(c.startReading))*Number(c.coin??m?.coin??10);c.campaignProfit=c.campaignMeterRevenue-Number(c.totalCost||0);save();renderAll();toast(`活動已結束｜活動營收 ${money(c.campaignMeterRevenue)}｜活動營利 ${money(c.campaignProfit)}`)}
 
 function renderHistory(){
@@ -205,7 +229,60 @@ document.addEventListener('click',e=>{let n=e.target.closest('[data-page]'),g=e.
 $('#addLocation').onclick=()=>openModal('l');$('#addMachine').onclick=()=>state.locations.length?openModal('m'):(toast('請先新增場地。',true),page('locations'));$('#closeModal').onclick=$('#cancelModal').onclick=closeModal;$('#backdrop').onclick=e=>{if(e.target.id==='backdrop')closeModal()};$('#locSearch').oninput=renderLocations;$('#macSearch').oninput=renderMachines;$('#macFilter').onchange=renderMachines;$('#readingLoc').onchange=renderReadingMachines;['readingDate','readingCurrent','readingQty','readingPrevious'].forEach(id=>$('#'+id).addEventListener('input',updateReadingPreview));$('#readingMac').onchange=()=>{let prev=latestReading($('#readingMac').value,$('#readingDate').value),base=$('#readingPrevious');base.value=prev?prev.current:Number(machine($('#readingMac').value)?.initialReading||0);base.dataset.autoFilled='true';base.readOnly=true;updateReadingPreview()};
 $('#readingDate').addEventListener('change',()=>{let prev=latestReading($('#readingMac').value,$('#readingDate').value),base=$('#readingPrevious');if(prev){base.value=prev.current;base.readOnly=true}else{base.value=Number(machine($('#readingMac').value)?.initialReading||0);base.readOnly=true}base.dataset.autoFilled='true';updateReadingPreview()});$('#hamb').onclick=()=>$('#sidebar').classList.toggle('open');$('#readingDate').value=today();
 $('#readingForm').addEventListener('submit',e=>{e.preventDefault();updateReadingPreview();let m=machine($('#readingMac').value),date=$('#readingDate').value,current=Number($('#readingCurrent').value),quantity=Number($('#readingQty').value),prev=latestReading(m?.id,date),previous=Number(prev?.current??m?.initialReading??$('#readingPrevious').value??0);if(!m)return toast('請先建立場地與機台。',true);if(state.readings.some(r=>r.machineId===m.id&&r.date===date))return toast('這台機器當天已經有抄表紀錄。',true);if(state.readings.some(r=>r.machineId===m.id&&r.date>date))return toast('請依照時間順序新增抄表紀錄；這台機器已有較晚日期的紀錄。',true);if(current<previous)return toast('目前讀數不能小於上次讀數，請確認數值。',true);if(!Number.isInteger(current)||!Number.isInteger(quantity)||current<0||quantity<0)return toast('讀數與出貨數量請輸入 0 或正整數。',true);let revenue=(current-previous)*Number(m.coin||0),cost=quantity*Number(m.unitCost||0),record={id:uuid(),createdAt:Date.now(),date,locationId:m.locationId,machineId:m.id,machineNumber:m.number,previous,current,quantity,coin:Number(m.coin||0),unitCost:Number(m.unitCost||0),rent:Number(m.rent||0),revenue,cost,profit:revenue-cost};state.readings.push(record);save();$('#readingCurrent').value='';$('#readingQty').value='0';renderAll();toast(`抄表已儲存｜區間營收 ${money(record.revenue)}｜商品成本 ${money(record.cost)}｜區間營利 ${money(record.profit)}`)});
-$('#newCampaign').onclick=openCampaignForm;$('#cancelCampaign').onclick=()=>$('#campaignFormPanel').classList.add('hidden');$('#addCampaignItem').onclick=()=>addCampaignItem();$('#campaignItems').addEventListener('input',updateCampaignPreview);$('#campaignForm').addEventListener('submit',e=>{e.preventDefault();let m=machine($('#campaignMachine').value),items=$$('#campaignItems .campaign-item').map(row=>({id:uuid(),name:row.querySelector('[name="itemName"]').value.trim(),unitCost:Number(row.querySelector('[name="itemCost"]').value),quantity:Number(row.querySelector('[name="itemQty"]').value)}));if(!m)return toast('請先建立機台。',true);if(!items.length||items.some(i=>!i.name||i.unitCost<0||i.quantity<1||!Number.isInteger(i.quantity)))return toast('請確認每個品項都有名稱、有效成本與數量。',true);let startReading=Number($('#campaignStartReading').value);if(!Number.isInteger(startReading)||startReading<0)return toast('請輸入有效的活動起始讀數。',true);let totalCost=items.reduce((s,i)=>s+i.unitCost*i.quantity,0);state.campaigns.push({id:uuid(),name:$('#campaignName').value.trim(),machineId:m.id,machineNumber:m.number,startDate:$('#campaignStartDate').value,startReading,coin:Number(m.coin||10),items,totalCost,status:'active',createdAt:Date.now()});save();$('#campaignFormPanel').classList.add('hidden');renderAll();toast('特殊活動已儲存，成本已納入營利分析。')});$('#campaignTable').addEventListener('click',e=>{let end=e.target.closest('[data-end-c]');if(end)endCampaign(end.dataset.endC);let del=e.target.closest('[data-delete-c]');if(del&&confirm('確定刪除這筆特殊活動？')){state.campaigns=state.campaigns.filter(c=>c.id!==del.dataset.deleteC);save();renderAll();toast('特殊活動已刪除')}});$('#exportCsv').onclick=()=>{let rows=[['場地','台號','接手時起始讀數','每月租金','每格投幣金額','每件商品成本','狀態'],...state.machines.map(m=>[loc(m.locationId)?.name||'',m.number,m.initialReading||0,m.rent,m.coin,m.unitCost||0,m.active?'營運中':'已停用'])];let csv='\uFEFF'+rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');let a=document.createElement('a'),url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));a.href=url;a.download='機台清單.csv';a.click();URL.revokeObjectURL(url);toast('已匯出機台清單 CSV')};
+$('#newCampaign').onclick=()=>openCampaignForm();
+$('#cancelCampaign').onclick=()=>{$('#campaignFormPanel').classList.add('hidden');campaignEditId=null};
+$('#addCampaignItem').onclick=()=>addCampaignItem();
+$('#campaignItems').addEventListener('input',updateCampaignPreview);
+$('#campaignForm').addEventListener('submit',e=>{
+ e.preventDefault();
+ const existing=campaignEditId?state.campaigns.find(c=>c.id===campaignEditId):null;
+ const m=machine($('#campaignMachine').value);
+ const items=$$('#campaignItems .campaign-item').map(row=>({id:row.dataset.itemId||uuid(),name:row.querySelector('[name="itemName"]').value.trim(),unitCost:Number(row.querySelector('[name="itemCost"]').value),quantity:Number(row.querySelector('[name="itemQty"]').value)}));
+ const name=$('#campaignName').value.trim(),startDate=$('#campaignStartDate').value,endDate=$('#campaignEndDate').value||'',startReading=Number($('#campaignStartReading').value),endReadingRaw=$('#campaignEndReading').value,endReading=endReadingRaw===''?null:Number(endReadingRaw);
+ if(!name)return toast('請輸入活動名稱。',true);
+ if(!m)return toast('請選擇活動機台。',true);
+ if(!startDate)return toast('請選擇活動開始日期。',true);
+ if(endDate&&endDate<startDate)return toast('活動結束日期不可早於開始日期。',true);
+ if(!Number.isInteger(startReading)||startReading<0)return toast('請輸入有效的活動起始讀數。',true);
+ if(endReading!==null&&(!Number.isInteger(endReading)||endReading<startReading))return toast('活動結束讀數必須是有效整數，且不可小於開始讀數。',true);
+ if(!items.length||items.some(i=>!i.name||!Number.isFinite(i.unitCost)||i.unitCost<0||!Number.isInteger(i.quantity)||i.quantity<1))return toast('請確認每個品項都有名稱、有效成本與正整數數量。',true);
+ const totalCost=items.reduce((sum,item)=>sum+item.unitCost*item.quantity,0);
+ const ended=Boolean(endDate&&endReading!==null)||(existing?.status==='ended'&&!endDate&&endReading!==null);
+ const next={
+   ...(existing||{}),
+   id:existing?.id||uuid(),
+   name,machineId:m.id,machineNumber:m.number,startDate,startReading,
+   endDate:endDate||(existing?.status==='ended'?existing.endDate||'':''),
+   endReading:endReading!==null?endReading:(existing?.status==='ended'?existing.endReading:null),
+   coin:(existing&&existing.machineId===m.id)?Number(existing.coin??m.coin??10):Number(m.coin||10),
+   items,totalCost,
+   status:ended?'ended':(existing?.status==='ended'?'ended':'active'),
+   createdAt:existing?.createdAt||Date.now()
+ };
+ if(next.status==='ended'){
+   if(!next.endDate||next.endReading==null)return toast('已結束活動必須保留結束日期與結束讀數。',true);
+   if(next.endDate<next.startDate||Number(next.endReading)<Number(next.startReading))return toast('結束日期或結束讀數不可早於活動起點。',true);
+   next.campaignMeterRevenue=(Number(next.endReading)-Number(next.startReading))*Number(next.coin||10);
+   next.campaignProfit=next.campaignMeterRevenue-totalCost;
+ }else{
+   next.endDate='';next.endReading=null;next.campaignMeterRevenue=null;next.campaignProfit=null;
+ }
+ if(existing)state.campaigns=state.campaigns.map(c=>c.id===existing.id?next:c);
+ else state.campaigns.push(next);
+ save();
+ $('#campaignFormPanel').classList.add('hidden');campaignEditId=null;
+ renderAll();
+ toast(existing?`活動已更新｜目前總成本 ${money(totalCost)}`:`特殊活動已儲存｜總成本 ${money(totalCost)}`);
+});
+$('#campaignTable').addEventListener('click',e=>{
+ let edit=e.target.closest('[data-edit-c]');
+ if(edit){openCampaignForm(edit.dataset.editC);return}
+ let end=e.target.closest('[data-end-c]');
+ if(end)endCampaign(end.dataset.endC);
+ let del=e.target.closest('[data-delete-c]');
+ if(del&&confirm('確定刪除這筆特殊活動？')){state.campaigns=state.campaigns.filter(c=>c.id!==del.dataset.deleteC);save();renderAll();toast('特殊活動已刪除')}
+});
+$('#exportCsv').onclick=()=>{let rows=[['場地','台號','接手時起始讀數','每月租金','每格投幣金額','每件商品成本','狀態'],...state.machines.map(m=>[loc(m.locationId)?.name||'',m.number,m.initialReading||0,m.rent,m.coin,m.unitCost||0,m.active?'營運中':'已停用'])];let csv='\uFEFF'+rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');let a=document.createElement('a'),url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));a.href=url;a.download='機台清單.csv';a.click();URL.revokeObjectURL(url);toast('已匯出機台清單 CSV')};
 $('#loginForm').addEventListener('submit',async e=>{
   e.preventDefault();
   if(!supabaseClient)return showAuth('請先完成 config.js 設定。');

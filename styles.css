@@ -53,3 +53,11 @@ body:not(.authenticated) .shell{display:none}
 .history-filter #historyRangeLabel{margin:14px 0 0}
 .history-stats{margin-top:16px}
 @media(max-width:700px){.history-actions{flex-direction:column}.history-actions button{width:100%}}
+
+/* Special campaign editing */
+#campaignFormPanel{scroll-margin-top:18px}
+#campaignFormPanel .panelhead h2{font-size:17px}
+#campaignFormPanel .panelhead p{max-width:620px;line-height:1.6}
+#campaignFormPanel .reading-preview{margin-top:16px}
+#campaignTable [data-edit-c]{font-weight:700;color:#173b6c}
+@media(max-width:700px){#campaignFormPanel .panelhead{align-items:flex-start;gap:12px}}
