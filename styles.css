@@ -45,3 +45,11 @@ body:not(.authenticated) .shell{display:none}
 .signed-in-email{font-size:11px;color:#6c7b90;max-width:210px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .logout-button{padding:7px 10px}
 @media(max-width:700px){.auth-card{padding:23px}.top-actions{gap:6px}.signed-in-email{max-width:115px}.logout-button{padding:6px 8px;font-size:10px}}
+
+/* Historical period query */
+.history-filter{max-width:850px}
+.history-date-grid{margin:4px 0 16px}
+.history-actions{justify-content:flex-end;gap:10px}
+.history-filter #historyRangeLabel{margin:14px 0 0}
+.history-stats{margin-top:16px}
+@media(max-width:700px){.history-actions{flex-direction:column}.history-actions button{width:100%}}
