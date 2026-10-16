@@ -24,3 +24,63 @@
 #page-campaigns .panelhead h2{margin-bottom:4px}
 #page-campaigns .tablepanel{margin-top:18px}
 #page-campaigns .callout{margin-top:16px}
+
+/* Supabase authentication gate */
+body:not(.authenticated) .shell{display:none}
+.auth-screen{min-height:100vh;display:grid;place-items:center;padding:24px;background:linear-gradient(135deg,#f5f7fb,#eaf0f8)}
+.auth-card{width:min(430px,100%);background:#fff;border:1px solid #e4eaf2;border-radius:18px;padding:30px;box-shadow:0 20px 60px #152b4b12}
+.auth-brand{display:flex;align-items:center;gap:12px;margin-bottom:28px}
+.auth-brand b{display:block;font-size:16px}.auth-brand small{display:block;color:#8996a8;font-size:11px;margin-top:4px}
+.auth-card h1{font-size:23px;margin:0 0 8px;color:#172b4d}
+.auth-intro,.auth-foot{font-size:12px;line-height:1.7;color:#7f8b9d}
+.auth-status{font-size:12px;line-height:1.6;padding:11px 12px;border-radius:8px;background:#f2f6fc;color:#375a87;overflow-wrap:anywhere}
+.login-form{display:grid;gap:15px;margin-top:18px}
+.login-form label{display:grid;gap:7px;color:#52637a;font-size:12px;font-weight:600}
+.login-form input{height:42px;border:1px solid #dfe5ed;border-radius:8px;padding:0 12px;width:100%;color:#31435d}
+.login-form .primary{height:42px}
+.config-help{font-size:12px;line-height:1.7;background:#fff8e9;border:1px solid #f1dfb7;padding:12px;border-radius:8px;color:#785a1b}
+.config-help p{margin:7px 0 0}
+.auth-foot{display:block;margin-top:18px}
+.top-actions{display:flex;align-items:center;gap:10px}
+.signed-in-email{font-size:11px;color:#6c7b90;max-width:210px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.logout-button{padding:7px 10px}
+@media(max-width:700px){.auth-card{padding:23px}.top-actions{gap:6px}.signed-in-email{max-width:115px}.logout-button{padding:6px 8px;font-size:10px}}
+
+/* Historical period query */
+.history-filter{max-width:850px}
+.history-date-grid{margin:4px 0 16px}
+.history-actions{justify-content:flex-end;gap:10px}
+.history-filter #historyRangeLabel{margin:14px 0 0}
+.history-stats{margin-top:16px}
+@media(max-width:700px){.history-actions{flex-direction:column}.history-actions button{width:100%}}
+
+/* Special campaign editing */
+#campaignFormPanel{scroll-margin-top:18px}
+#campaignFormPanel .panelhead h2{font-size:17px}
+#campaignFormPanel .panelhead p{max-width:620px;line-height:1.6}
+#campaignFormPanel .reading-preview{margin-top:16px}
+#campaignTable [data-edit-c]{font-weight:700;color:#173b6c}
+@media(max-width:700px){#campaignFormPanel .panelhead{align-items:flex-start;gap:12px}}
+
+/* Reading form toggle and expanded profitability analysis */
+#readingFormPanel{scroll-margin-top:18px}
+#readingFormPanel .panelhead{align-items:flex-start;margin-bottom:18px}
+#readingFormPanel .panelhead h2{margin:0 0 6px}
+#readingFormPanel .panelhead p{margin:0;max-width:680px;line-height:1.7}
+.export-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;max-width:560px}
+.export-actions .secondary{font-size:11px;padding:9px 11px;white-space:nowrap}
+.analysis-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:18px 0}
+.analysis-bars{display:grid;gap:19px;padding:8px 0}
+.analysis-bar-row>div:first-child{display:flex;justify-content:space-between;gap:10px;margin-bottom:8px;font-size:12px;color:#5d6c80}
+.analysis-bar-row strong{color:#233954;font-variant-numeric:tabular-nums}
+.analysis-bar-track,.trend-track{height:10px;border-radius:99px;background:#eef2f7;overflow:hidden}
+.analysis-bar-track i,.trend-track i{display:block;height:100%;border-radius:99px;background:#3476b9;min-width:0}
+.analysis-bar-track i.goods{background:#e5a24d}.analysis-bar-track i.campaign{background:#9674d8}.analysis-bar-track i.rent{background:#a8b4c5}
+.analysis-bar-row small{display:block;text-align:right;color:#8793a4;font-size:10px;margin-top:5px}
+.trend-chart{display:grid;gap:11px;padding:4px 0}
+.trend-item{display:grid;grid-template-columns:43px minmax(50px,1fr) 96px;gap:10px;align-items:center;font-size:11px;color:#69788c}
+.trend-item strong{text-align:right;color:#243952;font-size:11px;white-space:nowrap}
+.trend-track{height:9px}.trend-track i{background:#4e9a8a}
+#profitMachineTable td{white-space:nowrap}
+@media(max-width:900px){.analysis-grid{grid-template-columns:1fr}.export-actions{justify-content:flex-start;max-width:none}}
+@media(max-width:700px){.export-actions{display:grid;grid-template-columns:1fr;width:100%}.export-actions button{width:100%}.trend-item{grid-template-columns:38px minmax(30px,1fr) 82px;gap:7px}.analysis-grid{gap:12px}}
