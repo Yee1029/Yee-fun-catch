@@ -79,23 +79,35 @@ function showAuth(message=''){
   const panel=$('#authPanel'); if(panel)panel.classList.remove('hidden');
   const status=$('#authStatus');if(status)status.textContent=message;
 }
+function authView(view='login'){
+  ['loginForm','signupForm','forgotForm','resetForm'].forEach(id=>$('#'+id)?.classList.toggle('hidden',id!==view));
+  $('#authActions')?.classList.toggle('hidden',view!=='login');
+  if(view==='login')$('#loginEmail')?.focus();
+}
+function authRedirectUrl(){return window.location.origin+window.location.pathname;}
+function showAccount(){
+ const p=window.CLAW_ACCOUNT_PROFILE||{};
+ $('#accountDetails').innerHTML=`<div class="account-row"><span>電子郵件</span><b>${esc(currentUser?.email||'')}</b></div><div class="account-row"><span>帳戶角色</span><b>${p.role==='admin'?'平台管理員':'客戶'}</b></div><div class="account-row"><span>帳戶狀態</span><b>${p.status==='active'?'已啟用':esc(p.status||'未知')}</b></div><div class="account-row"><span>帳戶建立日期</span><b>${currentUser?.created_at?new Date(currentUser.created_at).toLocaleDateString('zh-TW'):'—'}</b></div>`;
+ $('#passwordError').classList.add('hidden');$('#changePasswordForm').reset();$('#accountBackdrop').classList.remove('hidden');
+}
 function showApp(){
   document.body.classList.add('authenticated');
+  const adminNav=$('#customerAdminNav'); if(adminNav) adminNav.classList.toggle('hidden', window.CLAW_ACCOUNT_PROFILE?.role!=='admin');
   const panel=$('#authPanel');if(panel)panel.classList.add('hidden');
   const badge=$('#signedInEmail');if(badge)badge.textContent=currentUser?.email||'已登入';
 }
 async function initializeSupabase(){
   if(!configReady()){showAuth('請先在 config.js 填入 Supabase Project URL 與 Publishable Key。');$('#loginForm').classList.add('hidden');$('#configHelp').classList.remove('hidden');return;}
-  $('#loginForm').classList.remove('hidden');$('#configHelp').classList.add('hidden');
+  authView('login');$('#loginForm').classList.remove('hidden');$('#authActions').classList.remove('hidden');$('#configHelp').classList.add('hidden');
   supabaseClient=window.supabase.createClient(window.SUPABASE_CONFIG.url,window.SUPABASE_CONFIG.publishableKey);
   const {data,error}=await supabaseClient.auth.getSession();
   if(error){showAuth('無法讀取登入狀態：'+error.message);return;}
   if(data.session){currentUser=data.session.user;try{await loadAccountProfile();await loadCloudState();showApp();renderAll()}catch(err){await supabaseClient.auth.signOut();currentUser=null;showAuth(err.message);return;}}
   else showAuth('請使用已建立的管理員帳號登入。');
-  supabaseClient.auth.onAuthStateChange((event,session)=>{setTimeout(async()=>{if(session){currentUser=session.user;try{await loadAccountProfile();await loadCloudState();showApp();renderAll()}catch(err){currentUser=null;showAuth(err.message);await supabaseClient.auth.signOut()}}else{currentUser=null;state={...emptyState};showAuth('已登出，請重新登入。')}},0)});
+  supabaseClient.auth.onAuthStateChange((event,session)=>{setTimeout(async()=>{if(event==='PASSWORD_RECOVERY'){showAuth('請設定新的登入密碼。');authView('reset');return;}if(session){currentUser=session.user;try{await loadAccountProfile();await loadCloudState();showApp();renderAll()}catch(err){currentUser=null;showAuth(err.message);await supabaseClient.auth.signOut()}}else{currentUser=null;state={...emptyState};showAuth('已登出，請重新登入。');authView('login')}},0)});
 }
 function toast(t,bad=false){let el=$('#toast');if(!el)return;el.textContent=t;el.classList.toggle('bad',bad);el.classList.remove('hidden');clearTimeout(timer);timer=setTimeout(()=>el.classList.add('hidden'),2800)}
-function page(p){if(p!=='campaigns'&&$('#campaignFormPanel'))$('#campaignFormPanel').classList.add('hidden');$$('.page').forEach(x=>x.classList.toggle('active',x.id==='page-'+p));$$('.nav').forEach(x=>x.classList.toggle('active',x.dataset.page===p));$('#crumb').textContent=$(`[data-page="${p}"]`)?.textContent.trim().replace(/^\S+\s*/,'')||'營運總覽';$('#sidebar').classList.remove('open');renderAll();window.scrollTo({top:0,behavior:'smooth'})}
+function page(p){if(p==='customers')loadCustomers();if(p==='customers'&&window.CLAW_ACCOUNT_PROFILE?.role!=='admin'){toast('只有平台管理員可以使用客戶管理。',true);p='dashboard'}if(p!=='campaigns'&&$('#campaignFormPanel'))$('#campaignFormPanel').classList.add('hidden');$$('.page').forEach(x=>x.classList.toggle('active',x.id==='page-'+p));$$('.nav').forEach(x=>x.classList.toggle('active',x.dataset.page===p));$('#crumb').textContent=$(`[data-page="${p}"]`)?.textContent.trim().replace(/^\S+\s*/,'')||'營運總覽';$('#sidebar').classList.remove('open');renderAll();window.scrollTo({top:0,behavior:'smooth'})}
 function periodRange(date=new Date()){let d;if(date instanceof Date){d=new Date(date.getFullYear(),date.getMonth(),date.getDate(),12,0,0)}else{d=new Date(String(date)+'T12:00:00')}let start=new Date(d.getFullYear(),d.getMonth(),10);if(d.getDate()<10)start=new Date(d.getFullYear(),d.getMonth()-1,10);let end=new Date(start.getFullYear(),start.getMonth()+1,10);const fmt=x=>`${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}`;return {start:fmt(start),end:fmt(end)}}
 function dateMinusOne(iso){let d=new Date(iso+'T12:00:00');d.setDate(d.getDate()-1);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
 function fmtShort(iso){let [y,m,d]=iso.split('-');return `${Number(m)}/${Number(d)}`}
@@ -243,6 +255,25 @@ function renderAll(){updatePeriodLabel();renderDashboard();renderLocations();ren
 function openModal(type,id=null){modalType=type;editId=id;let obj=type==='l'?state.locations.find(x=>x.id===id):state.machines.find(x=>x.id===id);$('#error').classList.add('hidden');$('#modalEyebrow').textContent=type==='l'?'LOCATION MASTER':'MACHINE MASTER';$('#modalTitle').textContent=(id?'編輯':'新增')+(type==='l'?'場地':'機台');if(type==='l')$('#fields').innerHTML=`<label>場地名稱<input name="name" required maxlength="50" placeholder="例如：三民路" value="${esc(obj?.name||'')}"></label><label>場地地址（選填）<input name="address" maxlength="120" placeholder="輸入地址" value="${esc(obj?.address||'')}"></label><label>備註（選填）<textarea name="note" rows="2" placeholder="輸入備註">${esc(obj?.note||'')}</textarea></label><label>營運狀態<select name="active"><option value="true" ${obj?.active!==false?'selected':''}>營運中</option><option value="false" ${obj?.active===false?'selected':''}>已停用</option></select></label>`;else $('#fields').innerHTML=`<label>所屬場地<select name="locationId" required>${state.locations.map(l=>`<option value="${l.id}" ${obj?.locationId===l.id?'selected':''}>${esc(l.name)}${l.active?'':'（已停用）'}</option>`).join('')}</select></label><label>機台台號<input name="number" required maxlength="20" placeholder="例如：11" value="${esc(obj?.number||'')}"><small>台號只需在同一場地內唯一；不同場地可使用相同台號。</small></label><label>每月租金（NT$）<input name="rent" type="number" min="0" step="1" required value="${obj?.rent??0}"></label><label>每格投幣金額（NT$）<input name="coin" type="number" min="1" step="1" required value="${obj?.coin??10}"><small>預設每格 NT$10，可依機台個別調整。</small></label><label>接手時目前投幣讀數<input name="initialReading" type="number" min="0" step="1" required value="${obj?.initialReading??0}"><small>填寫租賃交接時機台上的累積讀數，例如 181540。第一次抄表會用這個數值當起點，不會把接手前的營收算進來。</small></label><label>營運狀態<select name="active"><option value="true" ${obj?.active!==false?'selected':''}>營運中</option><option value="false" ${obj?.active===false?'selected':''}>已停用</option></select></label>`;$('#backdrop').classList.remove('hidden')}
 function closeModal(){$('#backdrop').classList.add('hidden')}function fail(t){$('#error').textContent=t;$('#error').classList.remove('hidden')}
 $('#entityForm').addEventListener('submit',e=>{e.preventDefault();let d=Object.fromEntries(new FormData(e.currentTarget).entries());if(modalType==='l'){let name=d.name.trim();if(!name)return fail('請輸入場地名稱。');if(state.locations.some(l=>l.id!==editId&&l.name.toLowerCase()===name.toLowerCase()))return fail('已有同名場地，請確認是否重複建立。');let obj={id:editId||uuid(),name,address:d.address.trim(),note:d.note.trim(),active:d.active==='true'};if(editId)state.locations=state.locations.map(x=>x.id===editId?obj:x);else state.locations.push(obj)}else{if(!d.locationId)return fail('請先建立場地，再新增機台。');let number=d.number.trim();if(state.machines.some(m=>m.id!==editId&&m.locationId===d.locationId&&m.number.toLowerCase()===number.toLowerCase()))return fail('這個場地已有相同台號。');let obj={id:editId||uuid(),locationId:d.locationId,number,rent:Number(d.rent||0),coin:Number(d.coin||10),initialReading:Number(d.initialReading||0),unitCost:Number(state.machines.find(x=>x.id===editId)?.unitCost||0),active:d.active==='true'};if(editId)state.machines=state.machines.map(x=>x.id===editId?obj:x);else state.machines.push(obj)}save();closeModal();renderAll();toast((editId?'已更新':'已新增')+(modalType==='l'?'場地資料':'機台資料'))});
+async function loadCustomers(){
+ const msg=$('#customerAdminMessage'), body=$('#customersTable');
+ if(window.CLAW_ACCOUNT_PROFILE?.role!=='admin'){body.innerHTML='<tr><td colspan="5">無權限</td></tr>';return}
+ msg.textContent='正在載入客戶…';
+ try{
+  const {data,error}=await supabaseClient.from('profiles').select('id,email,role,status,created_at,approved_at').order('created_at',{ascending:false});
+  if(error) throw error;
+  const q=($('#customerSearch').value||'').trim().toLowerCase(), f=$('#customerStatusFilter').value;
+  const rows=(data||[]).filter(x=>x.role==='customer'&&(!q||(x.email||'').toLowerCase().includes(q))&&(f==='all'||x.status===f));
+  $('#customerCount').textContent=`共 ${rows.length} 位客戶`;
+  body.innerHTML=rows.map(x=>`<tr><td>${esc(x.email||'—')}</td><td>客戶</td><td><span class="status ${x.status==='active'?'':'off'}">${({invited:'待審核／待啟用',active:'已啟用',rejected:'已拒絕',suspended:'已停用'})[x.status]||esc(x.status)}</span></td><td>${x.created_at?new Date(x.created_at).toLocaleDateString('zh-TW'):'—'}</td><td>${x.status!=='active'?`<button class="action" data-customer-action="active" data-customer-id="${x.id}">核准</button>`:''}${x.status!=='rejected'?`<button class="action" data-customer-action="rejected" data-customer-id="${x.id}">拒絕</button>`:''}${x.status!=='suspended'?`<button class="action" data-customer-action="suspended" data-customer-id="${x.id}">停用</button>`:`<button class="action" data-customer-action="active" data-customer-id="${x.id}">重新啟用</button>`}</td></tr>`).join('')||'<tr><td colspan="5">沒有符合條件的客戶</td></tr>';
+  msg.textContent='客戶清單已更新。';
+ }catch(e){msg.textContent='載入失敗：'+e.message+'；請確認 profiles 的管理員讀取政策已部署。';body.innerHTML='<tr><td colspan="5">無法載入客戶清單</td></tr>'}
+}
+async function setCustomerStatus(id,status){
+ const label={active:'核准／啟用',rejected:'拒絕申請',suspended:'停用'}[status];
+ if(!confirm(`確定要${label}這個客戶帳號嗎？`))return;
+ try{const {data,error}=await supabaseClient.functions.invoke('admin-set-customer-status',{body:{user_id:id,status}});if(error)throw error;if(data?.error)throw new Error(data.error);toast(`已${label}`);await loadCustomers()}catch(e){toast('操作失敗：'+e.message+'。請確認 Edge Function 已部署。',true)}
+}
 document.addEventListener('click',e=>{let n=e.target.closest('[data-page]'),g=e.target.closest('[data-goto]');if(n)page(n.dataset.page);if(g)page(g.dataset.goto);let el=e.target.closest('[data-edit-l]');if(el)openModal('l',el.dataset.editL);el=e.target.closest('[data-edit-m]');if(el)openModal('m',el.dataset.editM);el=e.target.closest('[data-toggle-l]');if(el){let l=loc(el.dataset.toggleL);if(l.active&&state.machines.some(m=>m.locationId===l.id&&m.active)){toast('此場地仍有營運中的機台，請先停用所屬機台。',true);return}l.active=!l.active;save();renderAll();toast(l.active?'場地已啟用':'場地已停用')}el=e.target.closest('[data-toggle-m]');if(el){let m=machine(el.dataset.toggleM);if(!m.active&&!loc(m.locationId)?.active){toast('所屬場地已停用，請先啟用場地。',true);return}m.active=!m.active;save();renderAll();toast(m.active?'機台已啟用':'機台已停用')}});
 $('#addLocation').onclick=()=>openModal('l');$('#addMachine').onclick=()=>state.locations.length?openModal('m'):(toast('請先新增場地。',true),page('locations'));$('#closeModal').onclick=$('#cancelModal').onclick=closeModal;$('#backdrop').onclick=e=>{if(e.target.id==='backdrop')closeModal()};$('#locSearch').oninput=renderLocations;$('#macSearch').oninput=renderMachines;$('#macFilter').onchange=renderMachines;$('#readingLoc').onchange=renderReadingMachines;['readingDate','readingCurrent','readingQty','readingPrevious','readingUnitCost'].forEach(id=>$('#'+id).addEventListener('input',updateReadingPreview));$('#readingMac').onchange=()=>{let mid=$('#readingMac').value,date=$('#readingDate').value,prev=latestReading(mid,date),base=$('#readingPrevious'),costInput=$('#readingUnitCost');base.value=prev?prev.current:Number(machine(mid)?.initialReading||0);base.dataset.autoFilled='true';base.readOnly=true;if(costInput)costInput.value=prev?Number(prev.unitCost||0):Number(machine(mid)?.unitCost||0);updateReadingPreview()};
 $('#readingDate').addEventListener('change',()=>{let mid=$('#readingMac').value,date=$('#readingDate').value,prev=latestReading(mid,date),base=$('#readingPrevious'),costInput=$('#readingUnitCost');if(prev){base.value=prev.current;base.readOnly=true}else{base.value=Number(machine(mid)?.initialReading||0);base.readOnly=true}if(costInput)costInput.value=prev?Number(prev.unitCost||0):Number(machine(mid)?.unitCost||0);base.dataset.autoFilled='true';updateReadingPreview()});$('#hamb').onclick=()=>$('#sidebar').classList.toggle('open');$('#readingDate').value=today();
@@ -314,12 +345,24 @@ $('#loginForm').addEventListener('submit',async e=>{
     if(error)throw error;
     currentUser=data.user;await loadAccountProfile();await loadCloudState();showApp();renderAll();toast('登入成功，已載入雲端資料');
   }catch(err){showAuth('登入或讀取資料失敗：'+err.message)}
-  finally{btn.disabled=false;btn.textContent='登入管理系統'}
+  finally{btn.disabled=false;btn.textContent='登入夾夾管家'}
 });
+$('#showSignup').addEventListener('click',()=>{showAuth('申請帳號後，請依郵件完成驗證；帳號仍須等待平台管理員核准。');authView('signup')});
+$('#showForgot').addEventListener('click',()=>{showAuth('輸入註冊信箱以取得密碼重設連結。');authView('forgot')});
+$$('[data-auth-back]').forEach(b=>b.addEventListener('click',()=>{showAuth('請使用已啟用的帳號登入。');authView('login')}));
+$('#signupForm').addEventListener('submit',async e=>{e.preventDefault();const email=$('#signupEmail').value.trim().toLowerCase(),password=$('#signupPassword').value;if(password!==$('#signupPassword2').value)return showAuth('兩次輸入的密碼不一致。');if(password.length<8)return showAuth('密碼至少需要 8 碼。');const btn=e.submitter;btn.disabled=true;try{const {data,error}=await supabaseClient.auth.signUp({email,password,options:{emailRedirectTo:authRedirectUrl()}});if(error)throw error;authView('login');showAuth(data.session?'帳號申請已送出，請等待管理員核准。':'申請已送出！請先到電子郵件完成驗證，再等待管理員核准。');}catch(err){showAuth('申請失敗：'+err.message);authView('signup')}finally{btn.disabled=false}});
+$('#forgotForm').addEventListener('submit',async e=>{e.preventDefault();const btn=e.submitter;btn.disabled=true;try{const {error}=await supabaseClient.auth.resetPasswordForEmail($('#forgotEmail').value.trim(),{redirectTo:authRedirectUrl()});if(error)throw error;authView('login');showAuth('若此信箱已註冊，系統會寄送密碼重設連結。請檢查收件匣及垃圾郵件。');}catch(err){showAuth('無法寄送重設信：'+err.message);authView('forgot')}finally{btn.disabled=false}});
+$('#resetForm').addEventListener('submit',async e=>{e.preventDefault();const a=$('#resetPassword').value,b=$('#resetPassword2').value;if(a!==b)return showAuth('兩次輸入的密碼不一致。');if(a.length<8)return showAuth('密碼至少需要 8 碼。');const btn=e.submitter;btn.disabled=true;try{const {error}=await supabaseClient.auth.updateUser({password:a});if(error)throw error;await supabaseClient.auth.signOut();authView('login');showAuth('密碼已更新，請使用新密碼登入。')}catch(err){showAuth('更新密碼失敗：'+err.message)}finally{btn.disabled=false}});
+$('#accountButton').addEventListener('click',showAccount);$('#closeAccount').addEventListener('click',()=>$('#accountBackdrop').classList.add('hidden'));$('#accountBackdrop').addEventListener('click',e=>{if(e.target.id==='accountBackdrop')$('#accountBackdrop').classList.add('hidden')});
+$('#changePasswordForm').addEventListener('submit',async e=>{e.preventDefault();const err=$('#passwordError');err.classList.add('hidden');const old=$('#currentPassword').value,next=$('#newPassword').value;if(next!==$('#newPassword2').value){err.textContent='兩次輸入的新密碼不一致。';err.classList.remove('hidden');return}if(next.length<8){err.textContent='新密碼至少需要 8 碼。';err.classList.remove('hidden');return}const btn=e.submitter;btn.disabled=true;try{const {error:verifyError}=await supabaseClient.auth.signInWithPassword({email:currentUser.email,password:old});if(verifyError)throw new Error('目前密碼不正確。');const {error}=await supabaseClient.auth.updateUser({password:next});if(error)throw error;$('#changePasswordForm').reset();toast('密碼已成功變更');$('#accountBackdrop').classList.add('hidden')}catch(ex){err.textContent='變更密碼失敗：'+ex.message;err.classList.remove('hidden')}finally{btn.disabled=false}});
 $('#logoutButton').addEventListener('click',async()=>{if(supabaseClient)await supabaseClient.auth.signOut();currentUser=null;state={...emptyState};showAuth('已登出。');});
 $('#historySearch').addEventListener('click',renderHistory);
 $('#historyReset').addEventListener('click',()=>{setDefaultHistoryRange();renderHistory()});
 $('#historyStart').addEventListener('change',renderHistory);
 $('#historyEnd').addEventListener('change',renderHistory);
+$('#refreshCustomers')?.addEventListener('click',loadCustomers);$('#customerSearch')?.addEventListener('input',loadCustomers);$('#customerStatusFilter')?.addEventListener('change',loadCustomers);
+document.addEventListener('click',e=>{const b=e.target.closest('[data-customer-action]');if(b)setCustomerStatus(b.dataset.customerId,b.dataset.customerAction)});
+const originalPageFn=page;
+window.addEventListener('hashchange',()=>{});
 setDefaultHistoryRange();
 initializeSupabase();

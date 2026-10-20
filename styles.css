@@ -84,3 +84,17 @@ body:not(.authenticated) .shell{display:none}
 #profitMachineTable td{white-space:nowrap}
 @media(max-width:900px){.analysis-grid{grid-template-columns:1fr}.export-actions{justify-content:flex-start;max-width:none}}
 @media(max-width:700px){.export-actions{display:grid;grid-template-columns:1fr;width:100%}.export-actions button{width:100%}.trend-item{grid-template-columns:38px minmax(30px,1fr) 82px;gap:7px}.analysis-grid{gap:12px}}
+
+/* Account and authentication self-service */
+.auth-actions{display:flex;justify-content:space-between;align-items:center;margin-top:15px;padding-top:5px}
+.auth-actions .link{padding:8px 0;cursor:pointer}
+.login-form h2{font-size:18px;margin:3px 0;color:#172b4d}
+.login-form .secondary{width:100%;height:40px}
+.account-modal{width:min(540px,100%)}
+.account-details{display:grid;gap:0;margin-bottom:22px;border:1px solid #e8edf5;border-radius:10px;overflow:hidden}
+.account-row{display:flex;justify-content:space-between;gap:15px;padding:13px 14px;border-bottom:1px solid #edf0f5;font-size:12px}
+.account-row:last-child{border-bottom:0}.account-row span{color:#8190a4}.account-row b{color:#273c58;text-align:right;overflow-wrap:anywhere}
+.account-modal .login-form{margin-top:0;border-top:1px solid #edf0f5;padding-top:20px}
+.account-modal .login-form h3{margin:0;font-size:15px;color:#172b4d}
+.account-modal .login-form label{display:grid;gap:7px;color:#52637a;font-size:12px;font-weight:600}
+.account-modal .login-form input{height:42px;border:1px solid #dfe5ed;border-radius:8px;padding:0 12px;width:100%;color:#31435d}
