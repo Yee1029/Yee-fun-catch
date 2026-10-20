@@ -80,7 +80,9 @@ function showAuth(message=''){
   const status=$('#authStatus');if(status)status.textContent=message;
 }
 function authView(view='login'){
-  ['loginForm','signupForm','forgotForm','resetForm'].forEach(id=>$('#'+id)?.classList.toggle('hidden',id!==view));
+  const formByView={login:'loginForm',signup:'signupForm',forgot:'forgotForm',reset:'resetForm'};
+  const targetId=formByView[view]||'loginForm';
+  ['loginForm','signupForm','forgotForm','resetForm'].forEach(id=>$('#'+id)?.classList.toggle('hidden',id!==targetId));
   $('#authActions')?.classList.toggle('hidden',view!=='login');
   if(view==='login')$('#loginEmail')?.focus();
 }
