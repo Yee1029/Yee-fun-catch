@@ -63,6 +63,17 @@ async function loadCloudState(){
   state.readings=readingRows.map(x=>{const m=machineMap.get(x.machine_id);return{id:x.id,createdAt:Date.parse(x.created_at||x.reading_date)||Date.now(),date:x.reading_date,locationId:m?.venue_id||'',machineId:x.machine_id,machineNumber:m?.machine_number||'',previous:Number(x.previous_reading||0),current:Number(x.current_reading||0),quantity:Number(x.shipment_quantity||0),coin:Number(x.coin_value_snapshot||10),unitCost:Number(x.ordinary_unit_cost_snapshot||0),cost:Number(x.ordinary_goods_cost||0),revenue:Number(x.revenue||0),profit:Number(x.revenue||0)-Number(x.ordinary_goods_cost||0)}});
   state.campaigns=campaignRows.map(x=>({id:x.id,name:x.name,machineId:x.machine_id,machineNumber:machineMap.get(x.machine_id)?.machine_number||'',startDate:x.start_date,endDate:x.end_date||'',startReading:Number(x.start_meter||0),endReading:x.end_meter==null?null:Number(x.end_meter),coin:Number(x.coin_value_snapshot||10),items:itemRows.filter(i=>i.campaign_id===x.id).map(i=>({id:i.id,name:i.item_name,unitCost:Number(i.unit_cost||0),quantity:Number(i.quantity||0)})),totalCost:Number(x.total_cost||0),status:x.status==='completed'?'ended':'active',campaignMeterRevenue:x.campaign_revenue==null?null:Number(x.campaign_revenue),campaignProfit:x.campaign_profit==null?null:Number(x.campaign_profit),createdAt:Date.parse(x.created_at||x.start_date)||Date.now()}));
 }
+
+async function loadAccountProfile(){
+  if(!supabaseClient||!currentUser) throw new Error('尚未登入 Supabase');
+  const {data,error}=await supabaseClient.from('profiles').select('id,email,role,status').eq('id',currentUser.id).maybeSingle();
+  if(error) throw new Error('無法確認帳號權限：'+error.message);
+  if(!data) throw new Error('此帳號尚未建立平台資料，請聯絡平台管理員。');
+  if(data.status!=='active') throw new Error(data.status==='suspended'?'此帳號已停用，請聯絡平台管理員。':'此帳號尚未啟用，請等待平台管理員核准。');
+  window.CLAW_ACCOUNT_PROFILE=data;
+  return data;
+}
+
 function showAuth(message=''){
   document.body.classList.remove('authenticated');
   const panel=$('#authPanel'); if(panel)panel.classList.remove('hidden');
@@ -79,9 +90,9 @@ async function initializeSupabase(){
   supabaseClient=window.supabase.createClient(window.SUPABASE_CONFIG.url,window.SUPABASE_CONFIG.publishableKey);
   const {data,error}=await supabaseClient.auth.getSession();
   if(error){showAuth('無法讀取登入狀態：'+error.message);return;}
-  if(data.session){currentUser=data.session.user;try{await loadCloudState();showApp();renderAll()}catch(err){showAuth('讀取雲端資料失敗：'+err.message);return;}}
+  if(data.session){currentUser=data.session.user;try{await loadAccountProfile();await loadCloudState();showApp();renderAll()}catch(err){await supabaseClient.auth.signOut();currentUser=null;showAuth(err.message);return;}}
   else showAuth('請使用已建立的管理員帳號登入。');
-  supabaseClient.auth.onAuthStateChange((event,session)=>{setTimeout(async()=>{if(session){currentUser=session.user;try{await loadCloudState();showApp();renderAll()}catch(err){showAuth('讀取雲端資料失敗：'+err.message)}}else{currentUser=null;state={...emptyState};showAuth('已登出，請重新登入。')}},0)});
+  supabaseClient.auth.onAuthStateChange((event,session)=>{setTimeout(async()=>{if(session){currentUser=session.user;try{await loadAccountProfile();await loadCloudState();showApp();renderAll()}catch(err){currentUser=null;showAuth(err.message);await supabaseClient.auth.signOut()}}else{currentUser=null;state={...emptyState};showAuth('已登出，請重新登入。')}},0)});
 }
 function toast(t,bad=false){let el=$('#toast');if(!el)return;el.textContent=t;el.classList.toggle('bad',bad);el.classList.remove('hidden');clearTimeout(timer);timer=setTimeout(()=>el.classList.add('hidden'),2800)}
 function page(p){if(p!=='campaigns'&&$('#campaignFormPanel'))$('#campaignFormPanel').classList.add('hidden');$$('.page').forEach(x=>x.classList.toggle('active',x.id==='page-'+p));$$('.nav').forEach(x=>x.classList.toggle('active',x.dataset.page===p));$('#crumb').textContent=$(`[data-page="${p}"]`)?.textContent.trim().replace(/^\S+\s*/,'')||'營運總覽';$('#sidebar').classList.remove('open');renderAll();window.scrollTo({top:0,behavior:'smooth'})}
@@ -301,7 +312,7 @@ $('#loginForm').addEventListener('submit',async e=>{
   try{
     const {data,error}=await supabaseClient.auth.signInWithPassword({email:$('#loginEmail').value.trim(),password:$('#loginPassword').value});
     if(error)throw error;
-    currentUser=data.user;await loadCloudState();showApp();renderAll();toast('登入成功，已載入雲端資料');
+    currentUser=data.user;await loadAccountProfile();await loadCloudState();showApp();renderAll();toast('登入成功，已載入雲端資料');
   }catch(err){showAuth('登入或讀取資料失敗：'+err.message)}
   finally{btn.disabled=false;btn.textContent='登入管理系統'}
 });

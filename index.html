@@ -1,8 +1,8 @@
 <!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#173b6c"><title>夾夾管家｜娃娃機營運管理</title><link rel="stylesheet" href="styles.css"></head><body><div id="authPanel" class="auth-screen">
   <section class="auth-card">
     <div class="auth-brand"><span class="logo">夾</span><div><b>夾夾管家</b><small>雲端營運管理系統</small></div></div>
-    <h1>管理員登入</h1>
-    <p class="auth-intro">請使用已建立的 Supabase 管理員帳號登入。未登入時不會載入營運資料。</p>
+    <h1>夾夾管家登入</h1>
+    <p class="auth-intro">請使用已由平台管理員邀請並啟用的帳號登入。未啟用帳號無法存取營運資料。</p>
     <p id="authStatus" class="auth-status">正在檢查 Supabase 設定…</p>
     <div id="configHelp" class="config-help hidden">
       <b>尚未填入連線設定</b>
@@ -10,9 +10,9 @@
       <p>只使用 <code>sb_publishable_...</code> 公開金鑰。絕對不要填入 <code>sb_secret_...</code>、<code>service_role</code> 或資料庫密碼。</p>
     </div>
     <form id="loginForm" class="login-form hidden">
-      <label>Email<input id="loginEmail" type="email" autocomplete="username" required placeholder="管理員 Email"></label>
-      <label>密碼<input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Supabase 管理員密碼"></label>
-      <button class="primary" id="loginButton" type="submit">登入管理系統</button>
+      <label>Email<input id="loginEmail" type="email" autocomplete="username" required placeholder="已啟用帳號 Email"></label>
+      <label>密碼<input id="loginPassword" type="password" autocomplete="current-password" required placeholder="登入密碼"></label>
+      <button class="primary" id="loginButton" type="submit">登入夾夾管家</button>
     </form>
     <small class="auth-foot">登入僅驗證身分；資料存取仍由 Supabase RLS 政策控制。</small>
   </section>
