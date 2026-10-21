@@ -1,7 +1,7 @@
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const emptyState={locations:[],machines:[],readings:[],campaigns:[]};
 let state={...emptyState}, modalType='',editId=null,timer, supabaseClient=null, currentUser=null, syncQueue=Promise.resolve(), lastCloudIds={locations:new Set(),machines:new Set(),readings:new Set(),campaigns:new Set()};
-let campaignEditId=null;
+let campaignEditId=null, pendingAuthErrorMessage=null;
 const uuid=()=>crypto.randomUUID();
 const configReady=()=>Boolean(window.SUPABASE_CONFIG?.url&&window.SUPABASE_CONFIG?.publishableKey&&!String(window.SUPABASE_CONFIG.url).includes('YOUR_PROJECT')&&!String(window.SUPABASE_CONFIG.publishableKey).includes('YOUR_PUBLISHABLE'));
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -133,7 +133,7 @@ async function initializeSupabase(){
   if(error){showAuth('無法讀取登入狀態：'+error.message);return;}
   if(data.session){currentUser=data.session.user;try{await loadAccountProfile();await loadCloudState();showApp();renderAll()}catch(err){await supabaseClient.auth.signOut();currentUser=null;showAuth(err.message);return;}}
   else showAuth('請使用已建立的管理員帳號登入。');
-  supabaseClient.auth.onAuthStateChange((event,session)=>{setTimeout(async()=>{if(event==='PASSWORD_RECOVERY'){showAuth('請設定新的登入密碼。');authView('reset');return;}if(session){currentUser=session.user;try{await loadAccountProfile();await loadCloudState();showApp();renderAll()}catch(err){currentUser=null;showAuth(err.message);await supabaseClient.auth.signOut()}}else{currentUser=null;state={...emptyState};showAuth('已登出，請重新登入。');authView('login')}},0)});
+  supabaseClient.auth.onAuthStateChange((event,session)=>{setTimeout(async()=>{if(event==='PASSWORD_RECOVERY'){showAuth('請設定新的登入密碼。');authView('reset');return;}if(session){currentUser=session.user;try{await loadAccountProfile();await loadCloudState();showApp();renderAll()}catch(err){pendingAuthErrorMessage=err.message;currentUser=null;await supabaseClient.auth.signOut();showAuth(err.message);authView('login')}}else{currentUser=null;state={...emptyState};const message=pendingAuthErrorMessage;pendingAuthErrorMessage=null;showAuth(message||'已登出，請重新登入。');authView('login')}},0)});
 }
 function toast(t,bad=false){let el=$('#toast');if(!el)return;el.textContent=t;el.classList.toggle('bad',bad);el.classList.remove('hidden');clearTimeout(timer);timer=setTimeout(()=>el.classList.add('hidden'),2800)}
 function page(p){if(p==='customers')loadCustomers();if(p==='customers'&&window.CLAW_ACCOUNT_PROFILE?.role!=='admin'){toast('只有平台管理員可以使用客戶管理。',true);p='dashboard'}if(p!=='campaigns'&&$('#campaignFormPanel'))$('#campaignFormPanel').classList.add('hidden');$$('.page').forEach(x=>x.classList.toggle('active',x.id==='page-'+p));$$('.nav').forEach(x=>x.classList.toggle('active',x.dataset.page===p));$('#crumb').textContent=$(`[data-page="${p}"]`)?.textContent.trim().replace(/^\S+\s*/,'')||'營運總覽';$('#sidebar').classList.remove('open');renderAll();window.scrollTo({top:0,behavior:'smooth'})}
