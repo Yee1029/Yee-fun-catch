@@ -1,8 +1,28 @@
-<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#173b6c"><title>線上刮刮樂｜夾夾管家</title><link rel="stylesheet" href="scratch.css"></head><body>
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#173b6c"><title>線上刮刮樂｜夾夾管家</title><link rel="stylesheet" href="scratch.css?v=1.8"></head><body>
 <header class="scratch-top"><div class="small" style="color:#dbe8fb">夾夾管家 · 店家限定活動</div><h1 id="campaignTitle">線上刮刮樂</h1><p id="campaignSub">正在載入活動…</p></header>
 <main class="scratch-wrap"><section id="loading" class="scratch-card">正在載入活動，請稍候…</section><section id="notFound" class="scratch-card hidden"><h2>目前無法參加</h2><p id="notFoundText">活動不存在、尚未啟用或已結束。</p></section>
 <div id="playerApp" class="hidden"><section class="scratch-card"><div class="statline"><div class="stat"><span>剩餘洞數</span><strong id="holesLeft">—</strong></div><div class="stat"><span>可用刮獎次數</span><strong id="playsLeft">0</strong></div><div class="stat"><span>已刮次數</span><strong id="playsUsed">0</strong></div></div><h2>本活動獎項與剩餘配率</h2><div id="prizeList" class="prize-list"></div><p class="small">剩餘配率＝該獎項剩餘數量 ÷ 尚未刮開洞數。中獎位置不會公開。</p></section>
-<section class="scratch-card"><h2>取得刮獎次數</h2><p class="muted">每夾出 1 樣商品可申報 1 次；累積歸還每 3 樣額外獲得 1 次。夾取與歸還分開累積。請如實填寫，店家可依監視器畫面核對。每次最多申報 30 件，兩次申報需間隔至少 8 秒。</p><div class="rowform"><label>本次夾出商品數量<input id="caughtDelta" type="number" min="0" max="30" step="1" value="1"></label><label>本次歸還商品數量<input id="returnedDelta" type="number" min="0" max="30" step="1" value="0"></label></div><button class="btn" id="claimBtn" style="margin-top:14px">申報並取得次數</button><p id="claimMessage" class="message" role="status"></p><p class="small">目前累積：夾出 <span id="caughtTotal">0</span> 樣、歸還 <span id="returnedTotal">0</span> 樣；總共取得 <span id="playsEarned">0</span> 次。</p></section>
+<section class="scratch-card claim-launch-card"><div class="section-head"><div><h2 style="margin:0">取得刮獎次數</h2><p class="muted">依本次活動規則申報夾取與歸還數量。</p></div><button class="btn" id="openClaimModal" type="button">取得刮獎次數</button></div><p id="claimMessage" class="message" role="status"></p><p class="small">目前累積：夾出 <span id="caughtTotal">0</span> 樣、歸還 <span id="returnedTotal">0</span> 樣；總共取得 <span id="playsEarned">0</span> 次。</p></section>
 <section class="scratch-card"><div class="section-head"><div><h2>選擇一個洞刮開</h2><p class="muted">每次刮開會扣除 1 次；每個洞整場活動只能刮一次。洞數多時可向下滑動。</p></div></div><div id="scratchGrid" class="scratch-grid"></div><p id="scratchMessage" class="message" role="status"></p></section>
-<section class="notice" id="playerRulesNotice"><h2 style="margin-top:0">活動規則與參加須知</h2><div class="rules-rate" id="playerRulesRate">正在載入本活動遊玩次數規則…</div><ul class="rules-list"><li>此刮刮樂活動為額外增加活動，非機台販售商品。</li><li>若不符合活動規則、多刮或有作弊行為，所獲獎項即視為無效。</li><li>台主擁有活動規則解釋權，並有權變更規則或提早結束活動。</li><li>刮中指定號碼或符號才算中獎，刮開其他格子不代表中獎。</li></ul><p class="small">本活動採匿名自助申報。系統會要求定位在店家設定範圍內，但 GPS 可能被偽造；申報數量亦無法由系統自動證明。請如實申報，實際夾取及歸還情況可能由店家依監視器核對。每個洞只可刮開一次，答案已由系統鎖定。</p><label class="rules-agree"><input type="checkbox" id="agreeRules"> 我已閱讀並同意以上活動規則，並在同意後才投幣／參加本活動。</label><p id="agreeHint" class="small">請先勾選同意活動規則，才能申報次數或刮開格子；不同意可不參加本活動。</p></section></div></main><div id="toast" class="toast hidden"></div>
-<script src="config.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="scratch.js?v=1.7"></script></body></html>
+</div></main><div id="rulesModal" class="player-modal hidden" role="dialog" aria-modal="true" aria-labelledby="rulesModalTitle">
+ <div class="player-modal-panel rules-modal-panel">
+  <h2 id="rulesModalTitle">活動規則與參加須知</h2>
+  <ul class="modal-rules-list"><li>本活動為額外加碼，非機台販售商品。</li><li>不符規則、多刮或作弊，獎項無效。</li><li>台主可解釋或變更規則，並可提早結束活動。</li><li>刮中指定號碼或符號才算中獎。</li></ul>
+  <p class="small">申報數量採自助填寫，店家可能依監視器核對；GPS 可能被偽造。每洞限刮一次，答案已鎖定。</p>
+  <label class="rules-agree"><input type="checkbox" id="agreeRules"> 我已閱讀並同意活動規則，願意參加。</label>
+  <p id="agreeHint" class="small">勾選同意後，按「接受並開始」才能進入遊戲；不同意可離開頁面。</p>
+  <button class="btn" id="acceptRulesBtn" type="button" disabled>接受並開始</button>
+ </div>
+</div>
+<div id="claimModal" class="player-modal hidden" role="dialog" aria-modal="true" aria-labelledby="claimModalTitle">
+ <div class="player-modal-panel claim-modal-panel">
+  <div class="modal-head"><h2 id="claimModalTitle">取得刮獎次數</h2><button class="modal-close" id="closeClaimModal" type="button" aria-label="關閉">×</button></div>
+  <div id="playerRulesRate" class="rules-rate compact-rules">正在載入本活動規則…</div>
+  <div class="rowform"><label>本次夾出商品數量<input id="caughtDelta" type="number" min="0" max="30" step="1" value="1"></label><label>本次歸還商品數量<input id="returnedDelta" type="number" min="0" max="30" step="1" value="0"></label></div>
+  <p class="small">請如實申報；每次最多申報 30 件，兩次申報至少間隔 8 秒。</p>
+  <button class="btn" id="claimBtn" style="margin-top:8px" type="button">申報並取得次數</button>
+  <p id="claimModalMessage" class="message" role="status"></p>
+ </div>
+</div>
+<div id="toast" class="toast hidden"></div>
+<script src="config.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="scratch.js?v=1.8"></script></body></html>
