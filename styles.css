@@ -98,3 +98,5 @@ body:not(.authenticated) .shell{display:none}
 .account-modal .login-form h3{margin:0;font-size:15px;color:#172b4d}
 .account-modal .login-form label{display:grid;gap:7px;color:#52637a;font-size:12px;font-weight:600}
 .account-modal .login-form input{height:42px;border:1px solid #dfe5ed;border-radius:8px;padding:0 12px;width:100%;color:#31435d}
+/* 刮刮樂管理入口：沿用側邊欄既有樣式 */
+.sidebar nav a.nav{display:block;text-decoration:none;font-size:14px;line-height:1.25}

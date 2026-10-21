@@ -121,7 +121,7 @@ function showAccount(){
 }
 function showApp(){
   document.body.classList.add('authenticated');
-  const adminNav=$('#customerAdminNav'); if(adminNav) adminNav.classList.toggle('hidden', window.CLAW_ACCOUNT_PROFILE?.role!=='admin');
+  const adminNav=$('#customerAdminNav'); if(adminNav) adminNav.classList.toggle('hidden', window.CLAW_ACCOUNT_PROFILE?.role!=='admin'); const scratchNav=$('#scratchAdminLink'); if(scratchNav) scratchNav.classList.toggle('hidden', window.CLAW_ACCOUNT_PROFILE?.role!=='admin');
   const panel=$('#authPanel');if(panel)panel.classList.add('hidden');
   const badge=$('#signedInEmail');if(badge)badge.textContent=currentUser?.email||'已登入';
 }
