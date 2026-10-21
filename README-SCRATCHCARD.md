@@ -81,3 +81,16 @@
 ## v2.3 洞位狀態與已刮次數修正
 
 執行 `supabase/migration_scratchcard_prize_labels_played_cells.sql` 更新函式。此版使用 `scratch_claims.claimed_at`（正確欄位），並回傳全活動 `holes_scratched`；玩家頁的「已刮次數」顯示全活動已刮洞數，不再誤用個別玩家的 `plays_used`。
+
+
+## v2.5 中獎視窗與三處獎項色彩統一
+
+中獎視窗增加場地名稱與台號；獎項卡片、玩家已刮中獎格、店家答案存證格使用同一組賞別色票。無 SQL 變更。
+
+
+## v3.0：100 個賞別與統一高辨識配色
+
+- 賞別順序使用試算表欄位命名：A～Z、AA～AZ、BA～BZ、CA～CV，共 100 個。
+- 同一個 sort_order 在後台答案卡、玩家頁獎項卡、玩家已刮中獎格使用同一組配色。
+- A 賞固定金色；其餘賞別採高辨識度的色相分布，避免淺藍、銀藍等相近色連續重複。
+- 執行 `supabase/migration_scratchcard_prize_labels_played_cells.sql` 更新公開函式，然後部署前端；保留 config.js。
