@@ -314,12 +314,16 @@ $('#campaignItems').addEventListener('input',updateCampaignPreview);
 $('#campaignForm').addEventListener('submit',e=>{
  e.preventDefault();
  const existing=campaignEditId?state.campaigns.find(c=>c.id===campaignEditId):null;
+ const name=$('#campaignName').value.trim();
+ const startDate=$('#campaignStartDate').value;
+ const startReadingRaw=$('#campaignStartReading').value.trim();
+ const startReading=Number(startReadingRaw);
  const m=machine($('#campaignMachine').value);
  const items=$$('#campaignItems .campaign-item').map(row=>({id:row.dataset.itemId||uuid(),name:row.querySelector('[name="itemName"]').value.trim(),unitCost:Number(row.querySelector('[name="itemCost"]').value),quantity:Number(row.querySelector('[name="itemQty"]').value)}));
  if(!name)return toast('請輸入活動名稱。',true);
  if(!m)return toast('請選擇活動機台。',true);
  if(!startDate)return toast('請選擇活動開始日期。',true);
- if(!Number.isInteger(startReading)||startReading<0)return toast('請輸入有效的活動起始讀數。',true);
+ if(startReadingRaw===''||!Number.isInteger(startReading)||startReading<0)return toast('請輸入有效的活動起始讀數。',true);
  if(!items.length||items.some(i=>!i.name||!Number.isFinite(i.unitCost)||i.unitCost<0||!Number.isInteger(i.quantity)||i.quantity<1))return toast('請確認每個品項都有名稱、有效成本與正整數數量。',true);
  const totalCost=items.reduce((sum,item)=>sum+item.unitCost*item.quantity,0);
  const next={
