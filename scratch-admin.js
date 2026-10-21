@@ -3,7 +3,69 @@
   const cfg = window.SUPABASE_CONFIG;
   if (!cfg?.url || !cfg?.publishableKey || !window.supabase) { $('#authNotice').innerHTML = '<h1>缺少 Supabase 設定</h1><p>請確認 config.js 與 Supabase JS 已載入。</p>'; return; }
   const db = window.supabase.createClient(cfg.url, cfg.publishableKey);
+
   let user = null, venues = [], machines = [], campaigns = [];
+  let mapsReady = null, placeSuggestions = [];
+  function loadGoogleMaps(){
+    if(mapsReady) return mapsReady;
+    mapsReady = new Promise((resolve,reject)=>{
+      const key = String(cfg.googleMapsApiKey || '').trim();
+      if(!key || key === 'PASTE_YOUR_GOOGLE_MAPS_API_KEY_HERE'){
+        reject(new Error('尚未設定 Google Maps API Key。請在 config.js 的 googleMapsApiKey 填入新金鑰。')); return;
+      }
+      if(window.google?.maps?.importLibrary){ resolve(window.google.maps); return; }
+      const callbackName='__yeeMapsReady';
+      window[callbackName]=()=>resolve(window.google.maps);
+      const script=document.createElement('script');
+      script.src='https://maps.googleapis.com/maps/api/js?key='+encodeURIComponent(key)+'&v=weekly&loading=async&callback='+callbackName;
+      script.async=true; script.onerror=()=>reject(new Error('Google Maps 載入失敗，請檢查 API 金鑰、網站限制及 API 是否已啟用。'));
+      document.head.appendChild(script);
+    });
+    return mapsReady;
+  }
+  function clearAddressSuggestions(){ const root=$('#addressSuggestions'); root.innerHTML=''; root.classList.add('hidden'); placeSuggestions=[]; }
+  async function searchGoogleAddress(){
+    const input=$('#address'), query=input.value.trim();
+    if(!query){say('請先輸入店家地址。',true);return;}
+    const btn=$('#geocodeAddress'); btn.disabled=true; btn.textContent='搜尋中…';
+    try{
+      const maps=await loadGoogleMaps();
+      const {AutocompleteSuggestion}=await maps.importLibrary('places');
+      const {suggestions}=await AutocompleteSuggestion.fetchAutocompleteSuggestions({
+        input:query,
+        includedRegionCodes:['tw'],
+        language:'zh-TW',
+        region:'tw'
+      });
+      const root=$('#addressSuggestions'); root.innerHTML=''; placeSuggestions=[];
+      const items=(suggestions||[]).filter(x=>x.placePrediction);
+      if(!items.length) throw new Error('Google Maps 找不到相符地址，請補上縣市／區，或確認地址是否正確。');
+      placeSuggestions=items;
+      items.slice(0,6).forEach((item,index)=>{
+        const pred=item.placePrediction;
+        const option=document.createElement('button');
+        option.type='button'; option.className='address-suggestion'; option.setAttribute('role','option');
+        option.innerHTML=`<strong>${esc(pred.mainText?.text || pred.text?.text || query)}</strong><small>${esc(pred.secondaryText?.text || '')}</small>`;
+        option.addEventListener('click',async()=>{
+          option.disabled=true;
+          try{
+            const place=pred.toPlace();
+            await place.fetchFields({fields:['formattedAddress','location','displayName']});
+            if(!place.location) throw new Error('此搜尋結果沒有提供座標，請選擇其他地址結果。');
+            input.value=place.formattedAddress || pred.text?.text || query;
+            $('#lat').value=Number(place.location.lat()).toFixed(7);
+            $('#lng').value=Number(place.location.lng()).toFixed(7);
+            clearAddressSuggestions();
+            say('已取得 Google Maps 店家座標，請確認地址與地點正確。');
+          }catch(err){say(err.message||String(err),true);option.disabled=false;}
+        });
+        root.append(option);
+      });
+      root.classList.remove('hidden');
+      say('請從地址建議清單中選擇正確的店家位置。');
+    }catch(e){say(e.message||String(e),true);}
+    finally{btn.disabled=false;btn.textContent='搜尋地址';}
+  }
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const say = (msg,bad=false) => { const el=$('#toast'); el.textContent=msg; el.classList.toggle('bad',bad); el.classList.remove('hidden'); setTimeout(()=>el.classList.add('hidden'),3500); };
   const message = (msg,bad=false) => { $('#createMessage').textContent=msg; $('#createMessage').classList.toggle('bad',bad); };
@@ -22,6 +84,6 @@
     if(action==='qr'){const box=$(`#qr-${id}`);box.classList.toggle('hidden');const q=$(`#qrcode-${id}`);q.innerHTML='';const link=new URL('scratch.html',location.href);link.searchParams.set('code',c.public_code);if(window.QRCode)new QRCode(q,{text:link.href,width:116,height:116});else q.textContent=link.href;}
     if(action==='print'){const link=new URL('scratch.html',location.href);link.searchParams.set('code',c.public_code);const w=window.open('','_blank','width=500,height=650');if(!w)throw new Error('瀏覽器阻擋列印視窗，請允許彈出視窗後重試。');w.document.write(`<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><title>刮刮樂 QR Code</title><style>body{font-family:system-ui;text-align:center;padding:24px}#qrcode{display:flex;justify-content:center;margin:24px}small{word-break:break-all}</style><h1>${esc(c.title)}</h1><p>${esc(c.holes_total)} 洞刮刮樂活動</p><div id="qrcode"></div><small>${esc(link.href)}</small><script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\/script><script>new QRCode(document.getElementById('qrcode'),{text:${JSON.stringify(link.href)},width:240,height:240});window.onload=()=>setTimeout(()=>window.print(),500);<\/script></html>`);w.document.close();}
   }catch(err){say(err.message||String(err),true);}}
-  async function init(){fillHoles();addPrize();$('#venue').addEventListener('change',fillMachines);$('#addPrize').onclick=()=>addPrize();$('#createForm').onsubmit=createCampaign;$('#refresh').onclick=()=>loadCampaigns().catch(e=>say(e.message,true));$('#geocodeAddress').onclick=async()=>{const address=$('#address').value.trim();if(!address){say('請先輸入店家地址。',true);return;}const b=$('#geocodeAddress');b.disabled=true;b.textContent='查詢中…';try{const url='https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=tw&q='+encodeURIComponent(address);const res=await fetch(url,{headers:{'Accept-Language':'zh-TW'}});if(!res.ok)throw new Error('地址查詢服務暫時無法使用，請稍後再試或手動輸入座標。');const rows=await res.json();if(!rows.length)throw new Error('找不到這個地址，請補上縣市／區，或改用手動輸入座標。');$('#lat').value=Number(rows[0].lat).toFixed(7);$('#lng').value=Number(rows[0].lon).toFixed(7);say('已依地址填入座標，請確認地圖查詢結果是否為正確店址。');}catch(e){say(e.message||String(e),true);}finally{b.disabled=false;b.textContent='用地址查詢座標';}};$('#campaignList').addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(b)doAction(b.dataset.action,b.dataset.id,b.dataset.url);});const {data:{session},error}=await db.auth.getSession();if(error||!session){$('#authNotice').innerHTML='<h1>請先登入管理員帳號</h1><p>刮刮樂活動管理僅限已啟用的平台管理員使用。</p><a class="btn" href="index.html">前往登入</a>';return;}user=session.user;const {data:profile,error:pe}=await db.from('profiles').select('role,status').eq('id',user.id).maybeSingle();if(pe||!profile||profile.role!=='admin'||profile.status!=='active'){await db.auth.signOut();$('#authNotice').innerHTML='<h1>沒有管理權限</h1><p>此功能僅供已啟用的平台管理員使用。</p><a class="btn" href="index.html">返回夾夾管家</a>';return;}$('#authNotice').classList.add('hidden');$('#adminApp').classList.remove('hidden');try{await loadMaster();await loadCampaigns();}catch(e){say('載入失敗：'+e.message,true);} }
+  async function init(){fillHoles();addPrize();$('#venue').addEventListener('change',fillMachines);$('#addPrize').onclick=()=>addPrize();$('#createForm').onsubmit=createCampaign;$('#refresh').onclick=()=>loadCampaigns().catch(e=>say(e.message,true));$('#geocodeAddress').onclick=searchGoogleAddress;$('#address').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();searchGoogleAddress();}});$('#address').addEventListener('input',()=>{clearAddressSuggestions();});$('#campaignList').addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(b)doAction(b.dataset.action,b.dataset.id,b.dataset.url);});const {data:{session},error}=await db.auth.getSession();if(error||!session){$('#authNotice').innerHTML='<h1>請先登入管理員帳號</h1><p>刮刮樂活動管理僅限已啟用的平台管理員使用。</p><a class="btn" href="index.html">前往登入</a>';return;}user=session.user;const {data:profile,error:pe}=await db.from('profiles').select('role,status').eq('id',user.id).maybeSingle();if(pe||!profile||profile.role!=='admin'||profile.status!=='active'){await db.auth.signOut();$('#authNotice').innerHTML='<h1>沒有管理權限</h1><p>此功能僅供已啟用的平台管理員使用。</p><a class="btn" href="index.html">返回夾夾管家</a>';return;}$('#authNotice').classList.add('hidden');$('#adminApp').classList.remove('hidden');try{await loadMaster();await loadCampaigns();}catch(e){say('載入失敗：'+e.message,true);} }
   init();
 })();
