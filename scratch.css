@@ -46,3 +46,11 @@
 .notice-modal-panel{width:min(100%,400px);text-align:center;border-top:5px solid #d71920}
 .notice-modal-panel p{line-height:1.65;margin:14px 0 20px}
 .notice-modal-panel .btn{min-width:120px}
+
+/* v2.1: clear two-line numbered scratch button and page-local earned counter */
+.scratch-cell{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;white-space:normal;line-height:1.15}
+.scratch-cell:before{content:none!important;display:none!important}
+.scratch-cell .cell-number{font-size:clamp(12px,2.6vw,18px);font-weight:700;color:#173b6c;line-height:1.15;white-space:nowrap}
+.scratch-cell .cell-action{font-size:clamp(23px,4.5vw,34px);font-weight:800;color:#fff;text-shadow:0 2px 5px #315b92;line-height:1.1}
+.scratch-cell.open{white-space:pre-line}
+.claim-launch-card .small strong{color:#2459a8;font-size:16px}
