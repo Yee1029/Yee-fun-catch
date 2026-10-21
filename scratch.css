@@ -54,3 +54,15 @@
 .scratch-cell .cell-action{font-size:clamp(23px,4.5vw,34px);font-weight:800;color:#fff;text-shadow:0 2px 5px #315b92;line-height:1.1}
 .scratch-cell.open{white-space:pre-line}
 .claim-launch-card .small strong{color:#2459a8;font-size:16px}
+
+/* v2.2: prize hierarchy — A賞 most prestigious, later grades progressively softer */
+.prize-list .prize:nth-child(1){border:2px solid #d6a83e;background:linear-gradient(145deg,#fff9df,#f5df9c);box-shadow:0 4px 14px #c18a2426}
+.prize-list .prize:nth-child(1) strong{color:#81530a}
+.prize-list .prize:nth-child(2){border:2px solid #b7c4d8;background:linear-gradient(145deg,#f8fbff,#e2e9f4)}
+.prize-list .prize:nth-child(3){border:1px solid #c8d8ed;background:linear-gradient(145deg,#f8fbff,#eaf2fc)}
+.prize-list .prize:nth-child(n+4){border:1px solid #dbe3ef;background:#f8fbff}
+.scratch-cell.open.played{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:5px;background:linear-gradient(145deg,#fff6dd,#ffe7a8);box-shadow:inset 0 0 0 1px #e8c36d;color:#4b3a16}
+.scratch-cell .cell-number{font-size:clamp(11px,2.3vw,16px);white-space:nowrap}
+.scratch-cell .cell-prize{font-size:clamp(11px,2.1vw,16px);font-weight:800;line-height:1.2;overflow-wrap:anywhere}
+.scratch-cell .cell-played{font-size:clamp(10px,1.8vw,13px);color:#8c5b15;font-weight:600}
+.scratch-cell.open.played .cell-number{color:#755c2a}
