@@ -45,3 +45,11 @@
 2. Google Cloud 專案需啟用 `Maps JavaScript API` 與 `Places API (New)`。
 3. API Key 是瀏覽器端金鑰，會出現在前端程式；必須限制網站來源為 `https://yee1029.github.io/*`，並限制只可使用上述 API。不要把未受限制的金鑰公開。
 4. 地址查詢由管理員按「搜尋地址」時觸發，選擇 Google 建議結果後取得座標並儲存至活動。玩家 GPS 驗證不呼叫 Google Maps API。
+
+
+## 答案預覽與存證（v1.3）
+- 活動列表新增「預覽答案位置／查看答案存證」，管理員可查看每一洞對應的獎項。
+- 草稿可預覽及重抽；鎖定啟用後，配置固定，提供 JSON 存證、CSV 清單及列印／另存 PDF。
+- JSON 存證包含活動 ID、公開代碼、場地／機台、鎖定時間、逐洞答案及 SHA-256 指紋。建議下載後另外備份。
+- SHA-256 只用來比對檔案內容是否變動，不等於第三方時間戳或法律上的不可竄改證明；資料庫權限管理仍然重要。
+- 若先前已執行過原版刮刮樂 SQL，請在 Supabase SQL Editor 執行 `supabase/migration_scratchcard_answer_evidence.sql` 一次。這個修正確保「鎖定啟用」會保留店家最後預覽的配置，不會在鎖定時再次洗牌。

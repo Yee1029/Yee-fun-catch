@@ -6,5 +6,13 @@
 <form id="createForm"><div class="grid"><label>活動名稱<input id="title" required maxlength="80" placeholder="例如：三民路 11 號台刮刮樂"></label><label>場地<select id="venue" required></select></label><label>機台<select id="machine" required></select></label><label>總洞數<select id="holes"></select></label><label class="full">店家地址<input id="address" type="text" maxlength="200" autocomplete="off" placeholder="輸入地址，例如：桃園市桃園區縣府路82號"><div id="addressSuggestions" class="address-suggestions hidden" role="listbox"></div></label><div class="inline full"><button class="btn secondary" type="button" id="geocodeAddress">搜尋地址</button><span class="muted">輸入地址後選擇 Google 建議地點，系統會自動填入座標。</span></div><label>店家定位緯度<input id="lat" type="number" step="any" required placeholder="由地址查詢填入或手動輸入"></label><label>店家定位經度<input id="lng" type="number" step="any" required placeholder="由地址查詢填入或手動輸入"></label></div><div class="inline"><span class="muted">玩家遊玩時才會要求手機 GPS；有效範圍 200 公尺。</span></div>
 <h2>獎項設定</h2><div id="prizeRows"></div><div class="inline"><button type="button" class="btn secondary" id="addPrize">＋ 新增獎項</button><span id="prizeTotal" class="muted">獎項總數：0</span></div><div class="inline actions"><button class="btn" type="submit" id="createBtn">建立草稿</button><span class="muted">建立後可重抽配置，確認後再鎖定啟用。</span></div></form><p id="createMessage" class="message" role="status"></p></section>
 <section class="card"><div class="section-head"><div><h1>活動列表</h1><p class="muted">鎖定答案後，中獎配置不可再更改。活動 QR Code 可重複查看及列印。</p></div><button class="btn secondary" id="refresh">重新整理</button></div><div id="campaignList" class="campaign-list"><p class="muted">載入中…</p></div></section>
-</div></main><div id="toast" class="toast hidden"></div>
+</div></main>
+<div id="answerModal" class="answer-modal hidden" role="dialog" aria-modal="true" aria-labelledby="answerTitle">
+  <section class="answer-panel"><div class="section-head"><div><h2 id="answerTitle">答案配置預覽</h2><p id="answerMeta" class="muted"></p></div><button id="closeAnswer" class="btn secondary" type="button">關閉</button></div>
+  <p id="evidenceNotice" class="notice">草稿預覽僅供確認。活動鎖定後才可下載存證檔案。</p>
+  <div id="answerLegend" class="answer-legend"></div><div id="answerGrid" class="answer-grid"></div>
+  <div class="inline"><button id="downloadEvidence" class="btn" type="button">下載答案存證 JSON</button><button id="downloadCsv" class="btn secondary" type="button">下載答案清單 CSV</button><button id="printEvidence" class="btn secondary" type="button">列印／另存 PDF</button></div>
+  <p class="small">存證檔包含活動識別資訊、鎖定時間、答案配置及 SHA-256 指紋。請在活動啟用後立即下載並自行備份。指紋可用於比對檔案是否變動，但不能單獨證明檔案產生時的真實性或防止管理員修改資料。</p>
+  </section>
+</div><div id="toast" class="toast hidden"></div>
 <script src="config.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script><script src="scratch-admin.js"></script></body></html>
