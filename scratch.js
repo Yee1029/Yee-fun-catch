@@ -1,5 +1,10 @@
 (() => {
- const $=s=>document.querySelector(s), params=new URLSearchParams(location.search), code=params.get('code');
+ const $=s=>document.querySelector(s);
+ // Read the activity code from the current URL. The fallback parsing helps when
+ // a browser or hosting layer preserves the query in a slightly unusual form.
+ const currentUrl = new URL(window.location.href);
+ const params = new URLSearchParams(currentUrl.search);
+ const code = (params.get('code') || new URLSearchParams(currentUrl.hash.replace(/^#/, '').replace(/^\?/, '')).get('code') || '').trim();
  const cfg=window.SUPABASE_CONFIG; if(!cfg?.url||!cfg?.publishableKey||!window.supabase){$('#loading').textContent='網站連線設定尚未完成。';return;}
  const db=window.supabase.createClient(cfg.url,cfg.publishableKey,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}});
  let campaign=null, session=null, stats={caught_total:0,returned_total:0,plays_earned:0,plays_used:0,plays_available:0}, geoCache=null, busy=false, revealedResults={};
