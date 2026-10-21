@@ -28,22 +28,41 @@ async function syncState(){
   for(const c of state.campaigns) for(const i of (c.items||[])) if(!i.id)i.id=items.find(x=>x.campaign_id===c.id&&x.item_name===i.name&&x.unit_cost===Number(i.unitCost||0)&&x.quantity===Number(i.quantity||0))?.id||uuid();
   const stableItems=state.campaigns.flatMap(c=>(c.items||[]).map(i=>({id:i.id,owner_id,campaign_id:c.id,item_name:i.name,unit_cost:Number(i.unitCost||0),quantity:Number(i.quantity||0)})));
   if(stableItems.length) ensureOk(await supabaseClient.from('special_campaign_items').upsert(stableItems));
-  // Remove records deleted from the UI. Existing machine/location data is normally archived, not deleted.
-  for(const table of ['special_campaign_items','special_campaigns','meter_readings','machines','venues']){
-    const stateKey={special_campaign_items:'campaignItems',special_campaigns:'campaigns',meter_readings:'readings',machines:'machines',venues:'locations'}[table];
-    if(table==='special_campaign_items'){
-      const ids=stableItems.map(x=>x.id);
-      let q=supabaseClient.from(table).delete().eq('owner_id',owner_id);
-      if(ids.length) q=q.not('id','in','('+ids.join(',')+')');
-      else q=q;
-      const res=await q; ensureOk(res);
-    }else{
-      const arr=state[stateKey]||[], ids=arr.map(x=>x.id);
-      let q=supabaseClient.from(table).delete().eq('owner_id',owner_id);
-      if(ids.length) q=q.not('id','in','('+ids.join(',')+')');
-      const res=await q; ensureOk(res);
-    }
+  // Safety: only delete rows that were present in the last successful cloud load
+  // and have since been explicitly removed from the in-memory state. Never issue
+  // an owner-wide DELETE when a local list is empty or has not been loaded.
+  const currentIds={
+    locations:state.locations.map(x=>x.id),
+    machines:state.machines.map(x=>x.id),
+    readings:state.readings.map(x=>x.id),
+    campaigns:state.campaigns.map(x=>x.id),
+    campaignItems:stableItems.map(x=>x.id)
+  };
+  const deleteTargets=[
+    ['special_campaign_items','campaignItems'],
+    ['special_campaigns','campaigns'],
+    ['meter_readings','readings'],
+    ['machines','machines'],
+    ['venues','locations']
+  ];
+  for(const [table,key] of deleteTargets){
+    const baseline=lastCloudIds[key];
+    // If no trusted baseline exists, skip deletion entirely.
+    if(!(baseline instanceof Set)) continue;
+    const keep=new Set(currentIds[key]||[]);
+    const removed=[...baseline].filter(id=>!keep.has(id));
+    if(!removed.length) continue;
+    const res=await supabaseClient.from(table).delete().eq('owner_id',owner_id).in('id',removed);
+    ensureOk(res);
   }
+  // Refresh baseline only after all writes/deletes above succeeded.
+  lastCloudIds={
+    locations:new Set(currentIds.locations),
+    machines:new Set(currentIds.machines),
+    readings:new Set(currentIds.readings),
+    campaigns:new Set(currentIds.campaigns),
+    campaignItems:new Set(currentIds.campaignItems)
+  };
 }
 async function loadCloudState(){
   const owner_id=currentUser.id;
@@ -62,6 +81,14 @@ async function loadCloudState(){
   state.machines=machineRows.map(x=>({id:x.id,locationId:x.venue_id,number:x.machine_number,rent:Number(x.monthly_rent||0),coin:Number(x.coin_value||10),unitCost:Number(x.ordinary_unit_cost||0),initialReading:Number(x.initial_reading||0),active:x.is_active}));
   state.readings=readingRows.map(x=>{const m=machineMap.get(x.machine_id);return{id:x.id,createdAt:Date.parse(x.created_at||x.reading_date)||Date.now(),date:x.reading_date,locationId:m?.venue_id||'',machineId:x.machine_id,machineNumber:m?.machine_number||'',previous:Number(x.previous_reading||0),current:Number(x.current_reading||0),quantity:Number(x.shipment_quantity||0),coin:Number(x.coin_value_snapshot||10),unitCost:Number(x.ordinary_unit_cost_snapshot||0),cost:Number(x.ordinary_goods_cost||0),revenue:Number(x.revenue||0),profit:Number(x.revenue||0)-Number(x.ordinary_goods_cost||0)}});
   state.campaigns=campaignRows.map(x=>({id:x.id,name:x.name,machineId:x.machine_id,machineNumber:machineMap.get(x.machine_id)?.machine_number||'',startDate:x.start_date,endDate:x.end_date||'',startReading:Number(x.start_meter||0),endReading:x.end_meter==null?null:Number(x.end_meter),coin:Number(x.coin_value_snapshot||10),items:itemRows.filter(i=>i.campaign_id===x.id).map(i=>({id:i.id,name:i.item_name,unitCost:Number(i.unit_cost||0),quantity:Number(i.quantity||0)})),totalCost:Number(x.total_cost||0),status:x.status==='completed'?'ended':'active',campaignMeterRevenue:x.campaign_revenue==null?null:Number(x.campaign_revenue),campaignProfit:x.campaign_profit==null?null:Number(x.campaign_profit),createdAt:Date.parse(x.created_at||x.start_date)||Date.now()}));
+  // Record the exact cloud snapshot. These IDs are the only rows syncState may delete later.
+  lastCloudIds={
+    locations:new Set(venueRows.map(x=>x.id)),
+    machines:new Set(machineRows.map(x=>x.id)),
+    readings:new Set(readingRows.map(x=>x.id)),
+    campaigns:new Set(campaignRows.map(x=>x.id)),
+    campaignItems:new Set(itemRows.map(x=>x.id))
+  };
 }
 
 async function loadAccountProfile(){
