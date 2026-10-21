@@ -76,3 +76,8 @@
 ## v2.2 獎項標示與已刮洞資訊
 
 執行 `supabase/migration_scratchcard_prize_labels_played_cells.sql` 後，玩家頁會在已刮洞位公開顯示洞號、對應獎項與「已刮出」；獎項依設定順序標示 A賞、B賞、C賞……。建立新活動時後台會自動為獎項名稱加上對應賞別。保留現有 `config.js`。
+
+
+## v2.3 洞位狀態與已刮次數修正
+
+執行 `supabase/migration_scratchcard_prize_labels_played_cells.sql` 更新函式。此版使用 `scratch_claims.claimed_at`（正確欄位），並回傳全活動 `holes_scratched`；玩家頁的「已刮次數」顯示全活動已刮洞數，不再誤用個別玩家的 `plays_used`。
