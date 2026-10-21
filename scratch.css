@@ -1410,3 +1410,1304 @@
 .scratch-cell.open.played.prize-99 .cell-number,
 .scratch-cell.open.played.prize-99 .cell-prize,
 .scratch-cell.open.played.prize-99 .cell-played { color: #172033 !important; }
+
+/* v3.1: one soft pastel palette keyed strictly by prize index across all three UI locations */
+
+.prize-grade-0, .answer-cell.prize-0, .scratch-cell.open.played.prize-0 {
+ background: #f8e7a6 !important;
+ border: 2px solid #d4a72c !important;
+ color: #6b4f00 !important;
+ box-shadow: 0 3px 10px #c7a04433 !important;
+}
+.prize-grade-0 strong, .prize-grade-0 span,
+.answer-cell.prize-0 strong, .answer-cell.prize-0 span,
+.scratch-cell.open.played.prize-0 .cell-number,
+.scratch-cell.open.played.prize-0 .cell-prize,
+.scratch-cell.open.played.prize-0 .cell-played { color: #6b4f00 !important; }
+
+
+.prize-grade-1, .answer-cell.prize-1, .scratch-cell.open.played.prize-1 {
+ background: #edd7d4 !important;
+ border: 1px solid #dea49c !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-1 strong, .prize-grade-1 span,
+.answer-cell.prize-1 strong, .answer-cell.prize-1 span,
+.scratch-cell.open.played.prize-1 .cell-number,
+.scratch-cell.open.played.prize-1 .cell-prize,
+.scratch-cell.open.played.prize-1 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-2, .answer-cell.prize-2, .scratch-cell.open.played.prize-2 {
+ background: #c3ead3 !important;
+ border: 1px solid #88ddac !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-2 strong, .prize-grade-2 span,
+.answer-cell.prize-2 strong, .answer-cell.prize-2 span,
+.scratch-cell.open.played.prize-2 .cell-number,
+.scratch-cell.open.played.prize-2 .cell-prize,
+.scratch-cell.open.played.prize-2 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-3, .answer-cell.prize-3, .scratch-cell.open.played.prize-3 {
+ background: #eadcef !important;
+ border: 1px solid #cea6de !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-3 strong, .prize-grade-3 span,
+.answer-cell.prize-3 strong, .answer-cell.prize-3 span,
+.scratch-cell.open.played.prize-3 .cell-number,
+.scratch-cell.open.played.prize-3 .cell-prize,
+.scratch-cell.open.played.prize-3 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-4, .answer-cell.prize-4, .scratch-cell.open.played.prize-4 {
+ background: #e9e9b9 !important;
+ border: 1px solid #dede7c !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-4 strong, .prize-grade-4 span,
+.answer-cell.prize-4 strong, .answer-cell.prize-4 span,
+.scratch-cell.open.played.prize-4 .cell-number,
+.scratch-cell.open.played.prize-4 .cell-prize,
+.scratch-cell.open.played.prize-4 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-5, .answer-cell.prize-5, .scratch-cell.open.played.prize-5 {
+ background: #cce2eb !important;
+ border: 1px solid #92c6dd !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-5 strong, .prize-grade-5 span,
+.answer-cell.prize-5 strong, .answer-cell.prize-5 span,
+.scratch-cell.open.played.prize-5 .cell-number,
+.scratch-cell.open.played.prize-5 .cell-prize,
+.scratch-cell.open.played.prize-5 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-6, .answer-cell.prize-6, .scratch-cell.open.played.prize-6 {
+ background: #efd7e1 !important;
+ border: 1px solid #df9fb9 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-6 strong, .prize-grade-6 span,
+.answer-cell.prize-6 strong, .answer-cell.prize-6 span,
+.scratch-cell.open.played.prize-6 .cell-number,
+.scratch-cell.open.played.prize-6 .cell-prize,
+.scratch-cell.open.played.prize-6 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-7, .answer-cell.prize-7, .scratch-cell.open.played.prize-7 {
+ background: #c4e8bf !important;
+ border: 1px solid #8edc84 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-7 strong, .prize-grade-7 span,
+.answer-cell.prize-7 strong, .answer-cell.prize-7 span,
+.scratch-cell.open.played.prize-7 .cell-number,
+.scratch-cell.open.played.prize-7 .cell-prize,
+.scratch-cell.open.played.prize-7 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-8, .answer-cell.prize-8, .scratch-cell.open.played.prize-8 {
+ background: #d6d1ea !important;
+ border: 1px solid #a69ada !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-8 strong, .prize-grade-8 span,
+.answer-cell.prize-8 strong, .answer-cell.prize-8 span,
+.scratch-cell.open.played.prize-8 .cell-number,
+.scratch-cell.open.played.prize-8 .cell-prize,
+.scratch-cell.open.played.prize-8 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-9, .answer-cell.prize-9, .scratch-cell.open.played.prize-9 {
+ background: #edd7c5 !important;
+ border: 1px solid #e1b289 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-9 strong, .prize-grade-9 span,
+.answer-cell.prize-9 strong, .answer-cell.prize-9 span,
+.scratch-cell.open.played.prize-9 .cell-number,
+.scratch-cell.open.played.prize-9 .cell-prize,
+.scratch-cell.open.played.prize-9 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-10, .answer-cell.prize-10, .scratch-cell.open.played.prize-10 {
+ background: #def2ed !important;
+ border: 1px solid #a6e3d4 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-10 strong, .prize-grade-10 span,
+.answer-cell.prize-10 strong, .answer-cell.prize-10 span,
+.scratch-cell.open.played.prize-10 .cell-number,
+.scratch-cell.open.played.prize-10 .cell-prize,
+.scratch-cell.open.played.prize-10 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-11, .answer-cell.prize-11, .scratch-cell.open.played.prize-11 {
+ background: #edd4ec !important;
+ border: 1px solid #de9cda !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-11 strong, .prize-grade-11 span,
+.answer-cell.prize-11 strong, .answer-cell.prize-11 span,
+.scratch-cell.open.played.prize-11 .cell-number,
+.scratch-cell.open.played.prize-11 .cell-prize,
+.scratch-cell.open.played.prize-11 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-12, .answer-cell.prize-12, .scratch-cell.open.played.prize-12 {
+ background: #dceac3 !important;
+ border: 1px solid #c0dd88 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-12 strong, .prize-grade-12 span,
+.answer-cell.prize-12 strong, .answer-cell.prize-12 span,
+.scratch-cell.open.played.prize-12 .cell-number,
+.scratch-cell.open.played.prize-12 .cell-prize,
+.scratch-cell.open.played.prize-12 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-13, .answer-cell.prize-13, .scratch-cell.open.played.prize-13 {
+ background: #dce3ef !important;
+ border: 1px solid #a6bade !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-13 strong, .prize-grade-13 span,
+.answer-cell.prize-13 strong, .answer-cell.prize-13 span,
+.scratch-cell.open.played.prize-13 .cell-number,
+.scratch-cell.open.played.prize-13 .cell-prize,
+.scratch-cell.open.played.prize-13 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-14, .answer-cell.prize-14, .scratch-cell.open.played.prize-14 {
+ background: #e9b9bd !important;
+ border: 1px solid #de7c84 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-14 strong, .prize-grade-14 span,
+.answer-cell.prize-14 strong, .answer-cell.prize-14 span,
+.scratch-cell.open.played.prize-14 .cell-number,
+.scratch-cell.open.played.prize-14 .cell-prize,
+.scratch-cell.open.played.prize-14 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-15, .answer-cell.prize-15, .scratch-cell.open.played.prize-15 {
+ background: #ccebd2 !important;
+ border: 1px solid #92dda3 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-15 strong, .prize-grade-15 span,
+.answer-cell.prize-15 strong, .answer-cell.prize-15 span,
+.scratch-cell.open.played.prize-15 .cell-number,
+.scratch-cell.open.played.prize-15 .cell-prize,
+.scratch-cell.open.played.prize-15 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-16, .answer-cell.prize-16, .scratch-cell.open.played.prize-16 {
+ background: #e3d7ef !important;
+ border: 1px solid #c09fdf !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-16 strong, .prize-grade-16 span,
+.answer-cell.prize-16 strong, .answer-cell.prize-16 span,
+.scratch-cell.open.played.prize-16 .cell-number,
+.scratch-cell.open.played.prize-16 .cell-prize,
+.scratch-cell.open.played.prize-16 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-17, .answer-cell.prize-17, .scratch-cell.open.played.prize-17 {
+ background: #e8e0bf !important;
+ border: 1px solid #dccb84 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-17 strong, .prize-grade-17 span,
+.answer-cell.prize-17 strong, .answer-cell.prize-17 span,
+.scratch-cell.open.played.prize-17 .cell-number,
+.scratch-cell.open.played.prize-17 .cell-prize,
+.scratch-cell.open.played.prize-17 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-18, .answer-cell.prize-18, .scratch-cell.open.played.prize-18 {
+ background: #d1e8ea !important;
+ border: 1px solid #9ad4da !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-18 strong, .prize-grade-18 span,
+.answer-cell.prize-18 strong, .answer-cell.prize-18 span,
+.scratch-cell.open.played.prize-18 .cell-number,
+.scratch-cell.open.played.prize-18 .cell-prize,
+.scratch-cell.open.played.prize-18 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-19, .answer-cell.prize-19, .scratch-cell.open.played.prize-19 {
+ background: #edc5dd !important;
+ border: 1px solid #e189bf !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-19 strong, .prize-grade-19 span,
+.answer-cell.prize-19 strong, .answer-cell.prize-19 span,
+.scratch-cell.open.played.prize-19 .cell-number,
+.scratch-cell.open.played.prize-19 .cell-prize,
+.scratch-cell.open.played.prize-19 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-20, .answer-cell.prize-20, .scratch-cell.open.played.prize-20 {
+ background: #e4f2de !important;
+ border: 1px solid #bae3a6 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-20 strong, .prize-grade-20 span,
+.answer-cell.prize-20 strong, .answer-cell.prize-20 span,
+.scratch-cell.open.played.prize-20 .cell-number,
+.scratch-cell.open.played.prize-20 .cell-prize,
+.scratch-cell.open.played.prize-20 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-21, .answer-cell.prize-21, .scratch-cell.open.played.prize-21 {
+ background: #d4d4ed !important;
+ border: 1px solid #9c9ede !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-21 strong, .prize-grade-21 span,
+.answer-cell.prize-21 strong, .answer-cell.prize-21 span,
+.scratch-cell.open.played.prize-21 .cell-number,
+.scratch-cell.open.played.prize-21 .cell-prize,
+.scratch-cell.open.played.prize-21 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-22, .answer-cell.prize-22, .scratch-cell.open.played.prize-22 {
+ background: #eacdc3 !important;
+ border: 1px solid #dd9e88 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-22 strong, .prize-grade-22 span,
+.answer-cell.prize-22 strong, .answer-cell.prize-22 span,
+.scratch-cell.open.played.prize-22 .cell-number,
+.scratch-cell.open.played.prize-22 .cell-prize,
+.scratch-cell.open.played.prize-22 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-23, .answer-cell.prize-23, .scratch-cell.open.played.prize-23 {
+ background: #dcefe7 !important;
+ border: 1px solid #a6dec5 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-23 strong, .prize-grade-23 span,
+.answer-cell.prize-23 strong, .answer-cell.prize-23 span,
+.scratch-cell.open.played.prize-23 .cell-number,
+.scratch-cell.open.played.prize-23 .cell-prize,
+.scratch-cell.open.played.prize-23 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-24, .answer-cell.prize-24, .scratch-cell.open.played.prize-24 {
+ background: #e2b9e9 !important;
+ border: 1px solid #cf7cde !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-24 strong, .prize-grade-24 span,
+.answer-cell.prize-24 strong, .answer-cell.prize-24 span,
+.scratch-cell.open.played.prize-24 .cell-number,
+.scratch-cell.open.played.prize-24 .cell-prize,
+.scratch-cell.open.played.prize-24 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-25, .answer-cell.prize-25, .scratch-cell.open.played.prize-25 {
+ background: #e7ebcc !important;
+ border: 1px solid #d3dd92 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-25 strong, .prize-grade-25 span,
+.answer-cell.prize-25 strong, .answer-cell.prize-25 span,
+.scratch-cell.open.played.prize-25 .cell-number,
+.scratch-cell.open.played.prize-25 .cell-prize,
+.scratch-cell.open.played.prize-25 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-26, .answer-cell.prize-26, .scratch-cell.open.played.prize-26 {
+ background: #d7e5ef !important;
+ border: 1px solid #9fc4df !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-26 strong, .prize-grade-26 span,
+.answer-cell.prize-26 strong, .answer-cell.prize-26 span,
+.scratch-cell.open.played.prize-26 .cell-number,
+.scratch-cell.open.played.prize-26 .cell-prize,
+.scratch-cell.open.played.prize-26 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-27, .answer-cell.prize-27, .scratch-cell.open.played.prize-27 {
+ background: #e8bfca !important;
+ border: 1px solid #dc849c !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-27 strong, .prize-grade-27 span,
+.answer-cell.prize-27 strong, .answer-cell.prize-27 span,
+.scratch-cell.open.played.prize-27 .cell-number,
+.scratch-cell.open.played.prize-27 .cell-prize,
+.scratch-cell.open.played.prize-27 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-28, .answer-cell.prize-28, .scratch-cell.open.played.prize-28 {
+ background: #d1ead2 !important;
+ border: 1px solid #9ada9b !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-28 strong, .prize-grade-28 span,
+.answer-cell.prize-28 strong, .answer-cell.prize-28 span,
+.scratch-cell.open.played.prize-28 .cell-number,
+.scratch-cell.open.played.prize-28 .cell-prize,
+.scratch-cell.open.played.prize-28 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-29, .answer-cell.prize-29, .scratch-cell.open.played.prize-29 {
+ background: #d1c5ed !important;
+ border: 1px solid #a489e1 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-29 strong, .prize-grade-29 span,
+.answer-cell.prize-29 strong, .answer-cell.prize-29 span,
+.scratch-cell.open.played.prize-29 .cell-number,
+.scratch-cell.open.played.prize-29 .cell-prize,
+.scratch-cell.open.played.prize-29 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-30, .answer-cell.prize-30, .scratch-cell.open.played.prize-30 {
+ background: #f2eade !important;
+ border: 1px solid #e3caa6 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-30 strong, .prize-grade-30 span,
+.answer-cell.prize-30 strong, .answer-cell.prize-30 span,
+.scratch-cell.open.played.prize-30 .cell-number,
+.scratch-cell.open.played.prize-30 .cell-prize,
+.scratch-cell.open.played.prize-30 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-31, .answer-cell.prize-31, .scratch-cell.open.played.prize-31 {
+ background: #d4edea !important;
+ border: 1px solid #9cded6 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-31 strong, .prize-grade-31 span,
+.answer-cell.prize-31 strong, .answer-cell.prize-31 span,
+.scratch-cell.open.played.prize-31 .cell-number,
+.scratch-cell.open.played.prize-31 .cell-prize,
+.scratch-cell.open.played.prize-31 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-32, .answer-cell.prize-32, .scratch-cell.open.played.prize-32 {
+ background: #eac3e3 !important;
+ border: 1px solid #dd88ce !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-32 strong, .prize-grade-32 span,
+.answer-cell.prize-32 strong, .answer-cell.prize-32 span,
+.scratch-cell.open.played.prize-32 .cell-number,
+.scratch-cell.open.played.prize-32 .cell-prize,
+.scratch-cell.open.played.prize-32 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-33, .answer-cell.prize-33, .scratch-cell.open.played.prize-33 {
+ background: #e6efdc !important;
+ border: 1px solid #c3dea6 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-33 strong, .prize-grade-33 span,
+.answer-cell.prize-33 strong, .answer-cell.prize-33 span,
+.scratch-cell.open.played.prize-33 .cell-number,
+.scratch-cell.open.played.prize-33 .cell-prize,
+.scratch-cell.open.played.prize-33 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-34, .answer-cell.prize-34, .scratch-cell.open.played.prize-34 {
+ background: #b9c5e9 !important;
+ border: 1px solid #7c94de !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-34 strong, .prize-grade-34 span,
+.answer-cell.prize-34 strong, .answer-cell.prize-34 span,
+.scratch-cell.open.played.prize-34 .cell-number,
+.scratch-cell.open.played.prize-34 .cell-prize,
+.scratch-cell.open.played.prize-34 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-35, .answer-cell.prize-35, .scratch-cell.open.played.prize-35 {
+ background: #ebcdcc !important;
+ border: 1px solid #dd9792 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-35 strong, .prize-grade-35 span,
+.answer-cell.prize-35 strong, .answer-cell.prize-35 span,
+.scratch-cell.open.played.prize-35 .cell-number,
+.scratch-cell.open.played.prize-35 .cell-prize,
+.scratch-cell.open.played.prize-35 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-36, .answer-cell.prize-36, .scratch-cell.open.played.prize-36 {
+ background: #d7efdf !important;
+ border: 1px solid #9fdfb5 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-36 strong, .prize-grade-36 span,
+.answer-cell.prize-36 strong, .answer-cell.prize-36 span,
+.scratch-cell.open.played.prize-36 .cell-number,
+.scratch-cell.open.played.prize-36 .cell-prize,
+.scratch-cell.open.played.prize-36 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-37, .answer-cell.prize-37, .scratch-cell.open.played.prize-37 {
+ background: #d9bfe8 !important;
+ border: 1px solid #bc84dc !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-37 strong, .prize-grade-37 span,
+.answer-cell.prize-37 strong, .answer-cell.prize-37 span,
+.scratch-cell.open.played.prize-37 .cell-number,
+.scratch-cell.open.played.prize-37 .cell-prize,
+.scratch-cell.open.played.prize-37 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-38, .answer-cell.prize-38, .scratch-cell.open.played.prize-38 {
+ background: #eae9d1 !important;
+ border: 1px solid #dad59a !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-38 strong, .prize-grade-38 span,
+.answer-cell.prize-38 strong, .answer-cell.prize-38 span,
+.scratch-cell.open.played.prize-38 .cell-number,
+.scratch-cell.open.played.prize-38 .cell-prize,
+.scratch-cell.open.played.prize-38 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-39, .answer-cell.prize-39, .scratch-cell.open.played.prize-39 {
+ background: #c5e4ed !important;
+ border: 1px solid #89cee1 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-39 strong, .prize-grade-39 span,
+.answer-cell.prize-39 strong, .answer-cell.prize-39 span,
+.scratch-cell.open.played.prize-39 .cell-number,
+.scratch-cell.open.played.prize-39 .cell-prize,
+.scratch-cell.open.played.prize-39 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-40, .answer-cell.prize-40, .scratch-cell.open.played.prize-40 {
+ background: #f2dee8 !important;
+ border: 1px solid #e3a6c4 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-40 strong, .prize-grade-40 span,
+.answer-cell.prize-40 strong, .answer-cell.prize-40 span,
+.scratch-cell.open.played.prize-40 .cell-number,
+.scratch-cell.open.played.prize-40 .cell-prize,
+.scratch-cell.open.played.prize-40 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-41, .answer-cell.prize-41, .scratch-cell.open.played.prize-41 {
+ background: #d9edd4 !important;
+ border: 1px solid #a8de9c !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-41 strong, .prize-grade-41 span,
+.answer-cell.prize-41 strong, .answer-cell.prize-41 span,
+.scratch-cell.open.played.prize-41 .cell-number,
+.scratch-cell.open.played.prize-41 .cell-prize,
+.scratch-cell.open.played.prize-41 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-42, .answer-cell.prize-42, .scratch-cell.open.played.prize-42 {
+ background: #c6c3ea !important;
+ border: 1px solid #9088dd !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-42 strong, .prize-grade-42 span,
+.answer-cell.prize-42 strong, .answer-cell.prize-42 span,
+.scratch-cell.open.played.prize-42 .cell-number,
+.scratch-cell.open.played.prize-42 .cell-prize,
+.scratch-cell.open.played.prize-42 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-43, .answer-cell.prize-43, .scratch-cell.open.played.prize-43 {
+ background: #efe3dc !important;
+ border: 1px solid #debca6 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-43 strong, .prize-grade-43 span,
+.answer-cell.prize-43 strong, .answer-cell.prize-43 span,
+.scratch-cell.open.played.prize-43 .cell-number,
+.scratch-cell.open.played.prize-43 .cell-prize,
+.scratch-cell.open.played.prize-43 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-44, .answer-cell.prize-44, .scratch-cell.open.played.prize-44 {
+ background: #b9e9da !important;
+ border: 1px solid #7cdebf !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-44 strong, .prize-grade-44 span,
+.answer-cell.prize-44 strong, .answer-cell.prize-44 span,
+.scratch-cell.open.played.prize-44 .cell-number,
+.scratch-cell.open.played.prize-44 .cell-prize,
+.scratch-cell.open.played.prize-44 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-45, .answer-cell.prize-45, .scratch-cell.open.played.prize-45 {
+ background: #eacceb !important;
+ border: 1px solid #db92dd !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-45 strong, .prize-grade-45 span,
+.answer-cell.prize-45 strong, .answer-cell.prize-45 span,
+.scratch-cell.open.played.prize-45 .cell-number,
+.scratch-cell.open.played.prize-45 .cell-prize,
+.scratch-cell.open.played.prize-45 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-46, .answer-cell.prize-46, .scratch-cell.open.played.prize-46 {
+ background: #e9efd7 !important;
+ border: 1px solid #cedf9f !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-46 strong, .prize-grade-46 span,
+.answer-cell.prize-46 strong, .answer-cell.prize-46 span,
+.scratch-cell.open.played.prize-46 .cell-number,
+.scratch-cell.open.played.prize-46 .cell-prize,
+.scratch-cell.open.played.prize-46 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-47, .answer-cell.prize-47, .scratch-cell.open.played.prize-47 {
+ background: #bfd1e8 !important;
+ border: 1px solid #84abdc !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-47 strong, .prize-grade-47 span,
+.answer-cell.prize-47 strong, .answer-cell.prize-47 span,
+.scratch-cell.open.played.prize-47 .cell-number,
+.scratch-cell.open.played.prize-47 .cell-prize,
+.scratch-cell.open.played.prize-47 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-48, .answer-cell.prize-48, .scratch-cell.open.played.prize-48 {
+ background: #ead1d5 !important;
+ border: 1px solid #da9aa4 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-48 strong, .prize-grade-48 span,
+.answer-cell.prize-48 strong, .answer-cell.prize-48 span,
+.scratch-cell.open.played.prize-48 .cell-number,
+.scratch-cell.open.played.prize-48 .cell-prize,
+.scratch-cell.open.played.prize-48 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-49, .answer-cell.prize-49, .scratch-cell.open.played.prize-49 {
+ background: #c5edca !important;
+ border: 1px solid #89e195 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-49 strong, .prize-grade-49 span,
+.answer-cell.prize-49 strong, .answer-cell.prize-49 span,
+.scratch-cell.open.played.prize-49 .cell-number,
+.scratch-cell.open.played.prize-49 .cell-prize,
+.scratch-cell.open.played.prize-49 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-50, .answer-cell.prize-50, .scratch-cell.open.played.prize-50 {
+ background: #e7def2 !important;
+ border: 1px solid #c0a6e3 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-50 strong, .prize-grade-50 span,
+.answer-cell.prize-50 strong, .answer-cell.prize-50 span,
+.scratch-cell.open.played.prize-50 .cell-number,
+.scratch-cell.open.played.prize-50 .cell-prize,
+.scratch-cell.open.played.prize-50 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-51, .answer-cell.prize-51, .scratch-cell.open.played.prize-51 {
+ background: #ede6d4 !important;
+ border: 1px solid #decc9c !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-51 strong, .prize-grade-51 span,
+.answer-cell.prize-51 strong, .answer-cell.prize-51 span,
+.scratch-cell.open.played.prize-51 .cell-number,
+.scratch-cell.open.played.prize-51 .cell-prize,
+.scratch-cell.open.played.prize-51 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-52, .answer-cell.prize-52, .scratch-cell.open.played.prize-52 {
+ background: #c3e9ea !important;
+ border: 1px solid #88dcdd !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-52 strong, .prize-grade-52 span,
+.answer-cell.prize-52 strong, .answer-cell.prize-52 span,
+.scratch-cell.open.played.prize-52 .cell-number,
+.scratch-cell.open.played.prize-52 .cell-prize,
+.scratch-cell.open.played.prize-52 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-53, .answer-cell.prize-53, .scratch-cell.open.played.prize-53 {
+ background: #efdce9 !important;
+ border: 1px solid #dea6cd !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-53 strong, .prize-grade-53 span,
+.answer-cell.prize-53 strong, .answer-cell.prize-53 span,
+.scratch-cell.open.played.prize-53 .cell-number,
+.scratch-cell.open.played.prize-53 .cell-prize,
+.scratch-cell.open.played.prize-53 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-54, .answer-cell.prize-54, .scratch-cell.open.played.prize-54 {
+ background: #cce9b9 !important;
+ border: 1px solid #a4de7c !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-54 strong, .prize-grade-54 span,
+.answer-cell.prize-54 strong, .answer-cell.prize-54 span,
+.scratch-cell.open.played.prize-54 .cell-number,
+.scratch-cell.open.played.prize-54 .cell-prize,
+.scratch-cell.open.played.prize-54 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-55, .answer-cell.prize-55, .scratch-cell.open.played.prize-55 {
+ background: #cccfeb !important;
+ border: 1px solid #929bdd !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-55 strong, .prize-grade-55 span,
+.answer-cell.prize-55 strong, .answer-cell.prize-55 span,
+.scratch-cell.open.played.prize-55 .cell-number,
+.scratch-cell.open.played.prize-55 .cell-prize,
+.scratch-cell.open.played.prize-55 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-56, .answer-cell.prize-56, .scratch-cell.open.played.prize-56 {
+ background: #efdbd7 !important;
+ border: 1px solid #dfab9f !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-56 strong, .prize-grade-56 span,
+.answer-cell.prize-56 strong, .answer-cell.prize-56 span,
+.scratch-cell.open.played.prize-56 .cell-number,
+.scratch-cell.open.played.prize-56 .cell-prize,
+.scratch-cell.open.played.prize-56 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-57, .answer-cell.prize-57, .scratch-cell.open.played.prize-57 {
+ background: #bfe8d3 !important;
+ border: 1px solid #84dcae !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-57 strong, .prize-grade-57 span,
+.answer-cell.prize-57 strong, .answer-cell.prize-57 span,
+.scratch-cell.open.played.prize-57 .cell-number,
+.scratch-cell.open.played.prize-57 .cell-prize,
+.scratch-cell.open.played.prize-57 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-58, .answer-cell.prize-58, .scratch-cell.open.played.prize-58 {
+ background: #e5d1ea !important;
+ border: 1px solid #cb9ada !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-58 strong, .prize-grade-58 span,
+.answer-cell.prize-58 strong, .answer-cell.prize-58 span,
+.scratch-cell.open.played.prize-58 .cell-number,
+.scratch-cell.open.played.prize-58 .cell-prize,
+.scratch-cell.open.played.prize-58 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-59, .answer-cell.prize-59, .scratch-cell.open.played.prize-59 {
+ background: #eaedc5 !important;
+ border: 1px solid #dce189 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-59 strong, .prize-grade-59 span,
+.answer-cell.prize-59 strong, .answer-cell.prize-59 span,
+.scratch-cell.open.played.prize-59 .cell-number,
+.scratch-cell.open.played.prize-59 .cell-prize,
+.scratch-cell.open.played.prize-59 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-60, .answer-cell.prize-60, .scratch-cell.open.played.prize-60 {
+ background: #deebf2 !important;
+ border: 1px solid #a6cee3 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-60 strong, .prize-grade-60 span,
+.answer-cell.prize-60 strong, .answer-cell.prize-60 span,
+.scratch-cell.open.played.prize-60 .cell-number,
+.scratch-cell.open.played.prize-60 .cell-prize,
+.scratch-cell.open.played.prize-60 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-61, .answer-cell.prize-61, .scratch-cell.open.played.prize-61 {
+ background: #edd4dd !important;
+ border: 1px solid #de9cb3 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-61 strong, .prize-grade-61 span,
+.answer-cell.prize-61 strong, .answer-cell.prize-61 span,
+.scratch-cell.open.played.prize-61 .cell-number,
+.scratch-cell.open.played.prize-61 .cell-prize,
+.scratch-cell.open.played.prize-61 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-62, .answer-cell.prize-62, .scratch-cell.open.played.prize-62 {
+ background: #c5eac3 !important;
+ border: 1px solid #8ddd88 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-62 strong, .prize-grade-62 span,
+.answer-cell.prize-62 strong, .answer-cell.prize-62 span,
+.scratch-cell.open.played.prize-62 .cell-number,
+.scratch-cell.open.played.prize-62 .cell-prize,
+.scratch-cell.open.played.prize-62 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-63, .answer-cell.prize-63, .scratch-cell.open.played.prize-63 {
+ background: #e0dcef !important;
+ border: 1px solid #b2a6de !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-63 strong, .prize-grade-63 span,
+.answer-cell.prize-63 strong, .answer-cell.prize-63 span,
+.scratch-cell.open.played.prize-63 .cell-number,
+.scratch-cell.open.played.prize-63 .cell-prize,
+.scratch-cell.open.played.prize-63 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-64, .answer-cell.prize-64, .scratch-cell.open.played.prize-64 {
+ background: #e9d2b9 !important;
+ border: 1px solid #deaf7c !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-64 strong, .prize-grade-64 span,
+.answer-cell.prize-64 strong, .answer-cell.prize-64 span,
+.scratch-cell.open.played.prize-64 .cell-number,
+.scratch-cell.open.played.prize-64 .cell-prize,
+.scratch-cell.open.played.prize-64 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-65, .answer-cell.prize-65, .scratch-cell.open.played.prize-65 {
+ background: #ccebe5 !important;
+ border: 1px solid #92ddcf !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-65 strong, .prize-grade-65 span,
+.answer-cell.prize-65 strong, .answer-cell.prize-65 span,
+.scratch-cell.open.played.prize-65 .cell-number,
+.scratch-cell.open.played.prize-65 .cell-prize,
+.scratch-cell.open.played.prize-65 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-66, .answer-cell.prize-66, .scratch-cell.open.played.prize-66 {
+ background: #efd7ec !important;
+ border: 1px solid #df9fd9 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-66 strong, .prize-grade-66 span,
+.answer-cell.prize-66 strong, .answer-cell.prize-66 span,
+.scratch-cell.open.played.prize-66 .cell-number,
+.scratch-cell.open.played.prize-66 .cell-prize,
+.scratch-cell.open.played.prize-66 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-67, .answer-cell.prize-67, .scratch-cell.open.played.prize-67 {
+ background: #d8e8bf !important;
+ border: 1px solid #badc84 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-67 strong, .prize-grade-67 span,
+.answer-cell.prize-67 strong, .answer-cell.prize-67 span,
+.scratch-cell.open.played.prize-67 .cell-number,
+.scratch-cell.open.played.prize-67 .cell-prize,
+.scratch-cell.open.played.prize-67 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-68, .answer-cell.prize-68, .scratch-cell.open.played.prize-68 {
+ background: #d1d9ea !important;
+ border: 1px solid #9aaeda !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-68 strong, .prize-grade-68 span,
+.answer-cell.prize-68 strong, .answer-cell.prize-68 span,
+.scratch-cell.open.played.prize-68 .cell-number,
+.scratch-cell.open.played.prize-68 .cell-prize,
+.scratch-cell.open.played.prize-68 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-69, .answer-cell.prize-69, .scratch-cell.open.played.prize-69 {
+ background: #edc5c6 !important;
+ border: 1px solid #e1898b !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-69 strong, .prize-grade-69 span,
+.answer-cell.prize-69 strong, .answer-cell.prize-69 span,
+.scratch-cell.open.played.prize-69 .cell-number,
+.scratch-cell.open.played.prize-69 .cell-prize,
+.scratch-cell.open.played.prize-69 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-70, .answer-cell.prize-70, .scratch-cell.open.played.prize-70 {
+ background: #def2e3 !important;
+ border: 1px solid #a6e3b6 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-70 strong, .prize-grade-70 span,
+.answer-cell.prize-70 strong, .answer-cell.prize-70 span,
+.scratch-cell.open.played.prize-70 .cell-number,
+.scratch-cell.open.played.prize-70 .cell-prize,
+.scratch-cell.open.played.prize-70 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-71, .answer-cell.prize-71, .scratch-cell.open.played.prize-71 {
+ background: #e2d4ed !important;
+ border: 1px solid #c19cde !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-71 strong, .prize-grade-71 span,
+.answer-cell.prize-71 strong, .answer-cell.prize-71 span,
+.scratch-cell.open.played.prize-71 .cell-number,
+.scratch-cell.open.played.prize-71 .cell-prize,
+.scratch-cell.open.played.prize-71 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-72, .answer-cell.prize-72, .scratch-cell.open.played.prize-72 {
+ background: #eae4c3 !important;
+ border: 1px solid #ddd188 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-72 strong, .prize-grade-72 span,
+.answer-cell.prize-72 strong, .answer-cell.prize-72 span,
+.scratch-cell.open.played.prize-72 .cell-number,
+.scratch-cell.open.played.prize-72 .cell-prize,
+.scratch-cell.open.played.prize-72 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-73, .answer-cell.prize-73, .scratch-cell.open.played.prize-73 {
+ background: #dcecef !important;
+ border: 1px solid #a6d6de !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-73 strong, .prize-grade-73 span,
+.answer-cell.prize-73 strong, .answer-cell.prize-73 span,
+.scratch-cell.open.played.prize-73 .cell-number,
+.scratch-cell.open.played.prize-73 .cell-prize,
+.scratch-cell.open.played.prize-73 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-74, .answer-cell.prize-74, .scratch-cell.open.played.prize-74 {
+ background: #e9b9d4 !important;
+ border: 1px solid #de7cb4 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-74 strong, .prize-grade-74 span,
+.answer-cell.prize-74 strong, .answer-cell.prize-74 span,
+.scratch-cell.open.played.prize-74 .cell-number,
+.scratch-cell.open.played.prize-74 .cell-prize,
+.scratch-cell.open.played.prize-74 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-75, .answer-cell.prize-75, .scratch-cell.open.played.prize-75 {
+ background: #d4ebcc !important;
+ border: 1px solid #a7dd92 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-75 strong, .prize-grade-75 span,
+.answer-cell.prize-75 strong, .answer-cell.prize-75 span,
+.scratch-cell.open.played.prize-75 .cell-number,
+.scratch-cell.open.played.prize-75 .cell-prize,
+.scratch-cell.open.played.prize-75 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-76, .answer-cell.prize-76, .scratch-cell.open.played.prize-76 {
+ background: #d8d7ef !important;
+ border: 1px solid #a19fdf !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-76 strong, .prize-grade-76 span,
+.answer-cell.prize-76 strong, .answer-cell.prize-76 span,
+.scratch-cell.open.played.prize-76 .cell-number,
+.scratch-cell.open.played.prize-76 .cell-prize,
+.scratch-cell.open.played.prize-76 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-77, .answer-cell.prize-77, .scratch-cell.open.played.prize-77 {
+ background: #e8ccbf !important;
+ border: 1px solid #dc9f84 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-77 strong, .prize-grade-77 span,
+.answer-cell.prize-77 strong, .answer-cell.prize-77 span,
+.scratch-cell.open.played.prize-77 .cell-number,
+.scratch-cell.open.played.prize-77 .cell-prize,
+.scratch-cell.open.played.prize-77 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-78, .answer-cell.prize-78, .scratch-cell.open.played.prize-78 {
+ background: #d1eae0 !important;
+ border: 1px solid #9adac1 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-78 strong, .prize-grade-78 span,
+.answer-cell.prize-78 strong, .answer-cell.prize-78 span,
+.scratch-cell.open.played.prize-78 .cell-number,
+.scratch-cell.open.played.prize-78 .cell-prize,
+.scratch-cell.open.played.prize-78 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-79, .answer-cell.prize-79, .scratch-cell.open.played.prize-79 {
+ background: #e8c5ed !important;
+ border: 1px solid #d889e1 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-79 strong, .prize-grade-79 span,
+.answer-cell.prize-79 strong, .answer-cell.prize-79 span,
+.scratch-cell.open.played.prize-79 .cell-number,
+.scratch-cell.open.played.prize-79 .cell-prize,
+.scratch-cell.open.played.prize-79 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-80, .answer-cell.prize-80, .scratch-cell.open.played.prize-80 {
+ background: #eef2de !important;
+ border: 1px solid #d8e3a6 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-80 strong, .prize-grade-80 span,
+.answer-cell.prize-80 strong, .answer-cell.prize-80 span,
+.scratch-cell.open.played.prize-80 .cell-number,
+.scratch-cell.open.played.prize-80 .cell-prize,
+.scratch-cell.open.played.prize-80 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-81, .answer-cell.prize-81, .scratch-cell.open.played.prize-81 {
+ background: #d4e1ed !important;
+ border: 1px solid #9cbede !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-81 strong, .prize-grade-81 span,
+.answer-cell.prize-81 strong, .answer-cell.prize-81 span,
+.scratch-cell.open.played.prize-81 .cell-number,
+.scratch-cell.open.played.prize-81 .cell-prize,
+.scratch-cell.open.played.prize-81 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-82, .answer-cell.prize-82, .scratch-cell.open.played.prize-82 {
+ background: #eac3cc !important;
+ border: 1px solid #dd889b !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-82 strong, .prize-grade-82 span,
+.answer-cell.prize-82 strong, .answer-cell.prize-82 span,
+.scratch-cell.open.played.prize-82 .cell-number,
+.scratch-cell.open.played.prize-82 .cell-prize,
+.scratch-cell.open.played.prize-82 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-83, .answer-cell.prize-83, .scratch-cell.open.played.prize-83 {
+ background: #dcefdd !important;
+ border: 1px solid #a6dea9 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-83 strong, .prize-grade-83 span,
+.answer-cell.prize-83 strong, .answer-cell.prize-83 span,
+.scratch-cell.open.played.prize-83 .cell-number,
+.scratch-cell.open.played.prize-83 .cell-prize,
+.scratch-cell.open.played.prize-83 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-84, .answer-cell.prize-84, .scratch-cell.open.played.prize-84 {
+ background: #cab9e9 !important;
+ border: 1px solid #9f7cde !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-84 strong, .prize-grade-84 span,
+.answer-cell.prize-84 strong, .answer-cell.prize-84 span,
+.scratch-cell.open.played.prize-84 .cell-number,
+.scratch-cell.open.played.prize-84 .cell-prize,
+.scratch-cell.open.played.prize-84 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-85, .answer-cell.prize-85, .scratch-cell.open.played.prize-85 {
+ background: #ebe0cc !important;
+ border: 1px solid #ddc292 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-85 strong, .prize-grade-85 span,
+.answer-cell.prize-85 strong, .answer-cell.prize-85 span,
+.scratch-cell.open.played.prize-85 .cell-number,
+.scratch-cell.open.played.prize-85 .cell-prize,
+.scratch-cell.open.played.prize-85 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-86, .answer-cell.prize-86, .scratch-cell.open.played.prize-86 {
+ background: #d7efed !important;
+ border: 1px solid #9fdfdb !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-86 strong, .prize-grade-86 span,
+.answer-cell.prize-86 strong, .answer-cell.prize-86 span,
+.scratch-cell.open.played.prize-86 .cell-number,
+.scratch-cell.open.played.prize-86 .cell-prize,
+.scratch-cell.open.played.prize-86 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-87, .answer-cell.prize-87, .scratch-cell.open.played.prize-87 {
+ background: #e8bfdf !important;
+ border: 1px solid #dc84c8 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-87 strong, .prize-grade-87 span,
+.answer-cell.prize-87 strong, .answer-cell.prize-87 span,
+.scratch-cell.open.played.prize-87 .cell-number,
+.scratch-cell.open.played.prize-87 .cell-prize,
+.scratch-cell.open.played.prize-87 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-88, .answer-cell.prize-88, .scratch-cell.open.played.prize-88 {
+ background: #ddead1 !important;
+ border: 1px solid #b9da9a !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-88 strong, .prize-grade-88 span,
+.answer-cell.prize-88 strong, .answer-cell.prize-88 span,
+.scratch-cell.open.played.prize-88 .cell-number,
+.scratch-cell.open.played.prize-88 .cell-prize,
+.scratch-cell.open.played.prize-88 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-89, .answer-cell.prize-89, .scratch-cell.open.played.prize-89 {
+ background: #c5cced !important;
+ border: 1px solid #8999e1 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-89 strong, .prize-grade-89 span,
+.answer-cell.prize-89 strong, .answer-cell.prize-89 span,
+.scratch-cell.open.played.prize-89 .cell-number,
+.scratch-cell.open.played.prize-89 .cell-prize,
+.scratch-cell.open.played.prize-89 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-90, .answer-cell.prize-90, .scratch-cell.open.played.prize-90 {
+ background: #f2e0de !important;
+ border: 1px solid #e3aca6 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-90 strong, .prize-grade-90 span,
+.answer-cell.prize-90 strong, .answer-cell.prize-90 span,
+.scratch-cell.open.played.prize-90 .cell-number,
+.scratch-cell.open.played.prize-90 .cell-prize,
+.scratch-cell.open.played.prize-90 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-91, .answer-cell.prize-91, .scratch-cell.open.played.prize-91 {
+ background: #d4edde !important;
+ border: 1px solid #9cdeb6 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-91 strong, .prize-grade-91 span,
+.answer-cell.prize-91 strong, .answer-cell.prize-91 span,
+.scratch-cell.open.played.prize-91 .cell-number,
+.scratch-cell.open.played.prize-91 .cell-prize,
+.scratch-cell.open.played.prize-91 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-92, .answer-cell.prize-92, .scratch-cell.open.played.prize-92 {
+ background: #dec3ea !important;
+ border: 1px solid #c388dd !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-92 strong, .prize-grade-92 span,
+.answer-cell.prize-92 strong, .answer-cell.prize-92 span,
+.scratch-cell.open.played.prize-92 .cell-number,
+.scratch-cell.open.played.prize-92 .cell-prize,
+.scratch-cell.open.played.prize-92 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-93, .answer-cell.prize-93, .scratch-cell.open.played.prize-93 {
+ background: #efefdc !important;
+ border: 1px solid #dedda6 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-93 strong, .prize-grade-93 span,
+.answer-cell.prize-93 strong, .answer-cell.prize-93 span,
+.scratch-cell.open.played.prize-93 .cell-number,
+.scratch-cell.open.played.prize-93 .cell-prize,
+.scratch-cell.open.played.prize-93 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-94, .answer-cell.prize-94, .scratch-cell.open.played.prize-94 {
+ background: #b9dce9 !important;
+ border: 1px solid #7cc4de !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-94 strong, .prize-grade-94 span,
+.answer-cell.prize-94 strong, .answer-cell.prize-94 span,
+.scratch-cell.open.played.prize-94 .cell-number,
+.scratch-cell.open.played.prize-94 .cell-prize,
+.scratch-cell.open.played.prize-94 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-95, .answer-cell.prize-95, .scratch-cell.open.played.prize-95 {
+ background: #ebccd9 !important;
+ border: 1px solid #dd92b3 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-95 strong, .prize-grade-95 span,
+.answer-cell.prize-95 strong, .answer-cell.prize-95 span,
+.scratch-cell.open.played.prize-95 .cell-number,
+.scratch-cell.open.played.prize-95 .cell-prize,
+.scratch-cell.open.played.prize-95 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-96, .answer-cell.prize-96, .scratch-cell.open.played.prize-96 {
+ background: #dbefd7 !important;
+ border: 1px solid #a9df9f !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-96 strong, .prize-grade-96 span,
+.answer-cell.prize-96 strong, .answer-cell.prize-96 span,
+.scratch-cell.open.played.prize-96 .cell-number,
+.scratch-cell.open.played.prize-96 .cell-prize,
+.scratch-cell.open.played.prize-96 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-97, .answer-cell.prize-97, .scratch-cell.open.played.prize-97 {
+ background: #c5bfe8 !important;
+ border: 1px solid #9184dc !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-97 strong, .prize-grade-97 span,
+.answer-cell.prize-97 strong, .answer-cell.prize-97 span,
+.scratch-cell.open.played.prize-97 .cell-number,
+.scratch-cell.open.played.prize-97 .cell-prize,
+.scratch-cell.open.played.prize-97 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-98, .answer-cell.prize-98, .scratch-cell.open.played.prize-98 {
+ background: #eadcd1 !important;
+ border: 1px solid #dab69a !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-98 strong, .prize-grade-98 span,
+.answer-cell.prize-98 strong, .answer-cell.prize-98 span,
+.scratch-cell.open.played.prize-98 .cell-number,
+.scratch-cell.open.played.prize-98 .cell-prize,
+.scratch-cell.open.played.prize-98 .cell-played { color: #374151 !important; }
+
+
+.prize-grade-99, .answer-cell.prize-99, .scratch-cell.open.played.prize-99 {
+ background: #c5ede2 !important;
+ border: 1px solid #89e1c9 !important;
+ color: #374151 !important;
+ box-shadow: none !important;
+}
+.prize-grade-99 strong, .prize-grade-99 span,
+.answer-cell.prize-99 strong, .answer-cell.prize-99 span,
+.scratch-cell.open.played.prize-99 .cell-number,
+.scratch-cell.open.played.prize-99 .cell-prize,
+.scratch-cell.open.played.prize-99 .cell-played { color: #374151 !important; }

@@ -94,3 +94,8 @@
 - 同一個 sort_order 在後台答案卡、玩家頁獎項卡、玩家已刮中獎格使用同一組配色。
 - A 賞固定金色；其餘賞別採高辨識度的色相分布，避免淺藍、銀藍等相近色連續重複。
 - 執行 `supabase/migration_scratchcard_prize_labels_played_cells.sql` 更新公開函式，然後部署前端；保留 config.js。
+
+
+## v3.1：柔和粉彩色與一致索引
+
+本版改用柔和粉彩色系，並由 `scratch_public_opened` 回傳 `prize_index`，玩家已刮開的格子直接依獎品排序索引套色，不再根據賞別文字猜測顏色。後台答案卡、玩家獎項卡與已刮格皆使用相同的 0–99 索引。更新 `supabase/migration_scratchcard_prize_labels_played_cells.sql` 後部署前端。
