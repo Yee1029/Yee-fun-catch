@@ -2,8 +2,6 @@ const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const emptyState={locations:[],machines:[],readings:[],campaigns:[]};
 let state={...emptyState}, modalType='',editId=null,timer, supabaseClient=null, currentUser=null, syncQueue=Promise.resolve(), lastCloudIds={locations:new Set(),machines:new Set(),readings:new Set(),campaigns:new Set()};
 let campaignEditId=null;
-// Keep access-denial messages visible when a rejected session is signed out.
-let preserveAuthMessageOnSignOut=false;
 const uuid=()=>crypto.randomUUID();
 const configReady=()=>Boolean(window.SUPABASE_CONFIG?.url&&window.SUPABASE_CONFIG?.publishableKey&&!String(window.SUPABASE_CONFIG.url).includes('YOUR_PROJECT')&&!String(window.SUPABASE_CONFIG.publishableKey).includes('YOUR_PUBLISHABLE'));
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -123,7 +121,7 @@ function showAccount(){
 }
 function showApp(){
   document.body.classList.add('authenticated');
-  const adminNav=$('#customerAdminNav'); if(adminNav) adminNav.classList.toggle('hidden', window.CLAW_ACCOUNT_PROFILE?.role!=='admin');
+  const adminNav=$('#customerAdminNav'); if(adminNav) adminNav.classList.toggle('hidden', window.CLAW_ACCOUNT_PROFILE?.role!=='admin'); const scratchNav=$('#scratchAdminLink'); if(scratchNav) scratchNav.classList.toggle('hidden', window.CLAW_ACCOUNT_PROFILE?.role!=='admin');
   const panel=$('#authPanel');if(panel)panel.classList.add('hidden');
   const badge=$('#signedInEmail');if(badge)badge.textContent=currentUser?.email||'已登入';
 }
@@ -135,7 +133,22 @@ async function initializeSupabase(){
   if(error){showAuth('無法讀取登入狀態：'+error.message);return;}
   if(data.session){currentUser=data.session.user;try{await loadAccountProfile();await loadCloudState();showApp();renderAll()}catch(err){await supabaseClient.auth.signOut();currentUser=null;showAuth(err.message);return;}}
   else showAuth('請使用已建立的管理員帳號登入。');
-  supabaseClient.auth.onAuthStateChange((event,session)=>{setTimeout(async()=>{if(event==='PASSWORD_RECOVERY'){showAuth('請設定新的登入密碼。');authView('reset');return;}if(session){currentUser=session.user;try{await loadAccountProfile();await loadCloudState();showApp();renderAll()}catch(err){currentUser=null;preserveAuthMessageOnSignOut=true;showAuth(err.message);await supabaseClient.auth.signOut()}}else{currentUser=null;state={...emptyState};if(preserveAuthMessageOnSignOut){preserveAuthMessageOnSignOut=false;authView('login');return;}showAuth('已登出，請重新登入。');authView('login')}},0)});
+  // SIGNED_IN is validated by the login form handler below. Do not validate/sign out
+  // again here: doing so races the login handler and overwrites the approval message.
+  supabaseClient.auth.onAuthStateChange((event,session)=>{
+    if(event==='PASSWORD_RECOVERY'){
+      showAuth('請設定新的登入密碼。');
+      authView('reset');
+      return;
+    }
+    if(event==='SIGNED_OUT'){
+      currentUser=null;
+      state={...emptyState};
+      // The initiating action (login rejection or manual logout) sets the final message.
+      // Do not overwrite it here with a generic signed-out message.
+      authView('login');
+    }
+  });
 }
 function toast(t,bad=false){let el=$('#toast');if(!el)return;el.textContent=t;el.classList.toggle('bad',bad);el.classList.remove('hidden');clearTimeout(timer);timer=setTimeout(()=>el.classList.add('hidden'),2800)}
 function page(p){if(p==='customers')loadCustomers();if(p==='customers'&&window.CLAW_ACCOUNT_PROFILE?.role!=='admin'){toast('只有平台管理員可以使用客戶管理。',true);p='dashboard'}if(p!=='campaigns'&&$('#campaignFormPanel'))$('#campaignFormPanel').classList.add('hidden');$$('.page').forEach(x=>x.classList.toggle('active',x.id==='page-'+p));$$('.nav').forEach(x=>x.classList.toggle('active',x.dataset.page===p));$('#crumb').textContent=$(`[data-page="${p}"]`)?.textContent.trim().replace(/^\S+\s*/,'')||'營運總覽';$('#sidebar').classList.remove('open');renderAll();window.scrollTo({top:0,behavior:'smooth'})}
@@ -380,17 +393,27 @@ $('#loginForm').addEventListener('submit',async e=>{
   e.preventDefault();
   if(!supabaseClient)return showAuth('請先完成 config.js 設定。');
   const btn=$('#loginButton');btn.disabled=true;btn.textContent='登入中…';
+  let signedInThisAttempt=false;
   try{
     const {data,error}=await supabaseClient.auth.signInWithPassword({email:$('#loginEmail').value.trim(),password:$('#loginPassword').value});
     if(error)throw error;
-    currentUser=data.user;await loadAccountProfile();await loadCloudState();showApp();renderAll();toast('登入成功，已載入雲端資料');
+    signedInThisAttempt=true;
+    currentUser=data.user;
+    await loadAccountProfile();
+    await loadCloudState();
+    showApp();renderAll();toast('登入成功，已載入雲端資料');
   }catch(err){
-    const message=err?.message||'未知錯誤';
-    const isAccessDenied=message.includes('尚未啟用')||message.includes('已停用')||message.includes('尚未建立平台資料');
-    if(isAccessDenied){preserveAuthMessageOnSignOut=true;showAuth(message);if(supabaseClient)await supabaseClient.auth.signOut();currentUser=null;}
-    else showAuth('登入或讀取資料失敗：'+message);
-  }
-  finally{btn.disabled=false;btn.textContent='登入夾夾管家'}
+    const message=err?.message||'登入失敗，請稍後再試。';
+    if(signedInThisAttempt){
+      try{await supabaseClient.auth.signOut()}catch(signOutError){console.error('拒絕未啟用帳號後登出失敗：',signOutError)}
+      currentUser=null;
+      state={...emptyState};
+      window.CLAW_ACCOUNT_PROFILE=null;
+      showAuth(message);
+    }else{
+      showAuth('登入失敗：'+message);
+    }
+  }finally{btn.disabled=false;btn.textContent='登入夾夾管家'}
 });
 $('#showSignup').addEventListener('click',()=>{showAuth('申請帳號後，請依郵件完成驗證；帳號仍須等待平台管理員核准。');authView('signup')});
 $('#showForgot').addEventListener('click',()=>{showAuth('輸入註冊信箱以取得密碼重設連結。');authView('forgot')});
