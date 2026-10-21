@@ -37,3 +37,12 @@
 .claim-launch-card{padding:14px 16px}
 .claim-launch-card h2{margin:0 0 4px}
 .claim-launch-card .muted{margin:4px 0}
+
+/* v2.0 play count and numbered scratch cells */
+.plays-banner{display:flex;align-items:center;gap:7px;padding:10px 13px;margin-bottom:14px;border:1px solid #ffd0d0;background:#fff5f5;border-radius:10px;color:#a61b1b;font-weight:700}
+.plays-banner strong{color:#d71920;font-size:26px;line-height:1.1}
+#playsLeft{color:#d71920!important}
+.scratch-cell{white-space:pre-line;font-weight:700}
+.notice-modal-panel{width:min(100%,400px);text-align:center;border-top:5px solid #d71920}
+.notice-modal-panel p{line-height:1.65;margin:14px 0 20px}
+.notice-modal-panel .btn{min-width:120px}
